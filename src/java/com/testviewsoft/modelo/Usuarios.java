@@ -2,10 +2,9 @@ package com.testviewsoft.modelo;
 // Generated 27-oct-2012 18:57:02 by Hibernate Tools 3.2.1.GA
 
 
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**

@@ -21,11 +21,9 @@ public class UsuariosPaisesDaoImpl implements UsuariosPaisesDao{
             session.beginTransaction();
             session.save(usuarioPais);
             session.beginTransaction().commit();
-            session.close();
         } catch (Exception e) {
             System.out.println("Error en Insertar "+e.getMessage());
             session.beginTransaction().rollback();
-            session.close();
         }
     }
 

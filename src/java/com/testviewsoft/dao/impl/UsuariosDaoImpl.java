@@ -21,11 +21,11 @@ public class UsuariosDaoImpl implements UsuariosDao{
             session.beginTransaction();
             session.save(usuario);
             session.beginTransaction().commit();
-            session.close();
+            
         } catch (Exception e) {
             System.out.println("Error en Insertar "+e.getMessage());
             session.beginTransaction().rollback();
-            session.close();
+            
         }
     }
 
@@ -53,6 +53,9 @@ public class UsuariosDaoImpl implements UsuariosDao{
 
     public Usuarios buscarPorId(Integer id) {
         return (Usuarios) session.createQuery("FROM Usuarios usuario WHERE usuario.id="+id+" AND usuario.estado="+Boolean.TRUE).iterate().next();
+    }
+    public Usuarios buscarPorReferenciaIdentificacionTipoDocumento(String referenciaIdentificacion) {
+        return (Usuarios) session.createQuery("FROM Usuarios usuario WHERE usuario.referenciaIdentificacion="+referenciaIdentificacion+" AND usuario.estado="+Boolean.TRUE).iterate().next();
     }
 
     public List<Usuarios> buscarTodos() {

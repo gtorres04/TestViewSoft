@@ -20,6 +20,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>usuarios.jsf</welcome-file>
+        <welcome-file>documentosIdentidad.jsf</welcome-file>
     </welcome-file-list>
 </web-app>

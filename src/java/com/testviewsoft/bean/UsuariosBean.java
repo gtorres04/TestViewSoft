@@ -5,28 +5,19 @@
 package com.testviewsoft.bean;
 
 import com.testviewsoft.dao.UsuariosDao;
-import com.testviewsoft.dao.UsuariosDao;
 import com.testviewsoft.dao.impl.DocumentosIdentidadDaoImpl;
 import com.testviewsoft.dao.impl.UsuariosDaoImpl;
-import com.testviewsoft.dao.impl.UsuariosDaoImpl;
 import com.testviewsoft.modelo.DocumentosIdentidad;
-import com.testviewsoft.modelo.Paises;
-import com.testviewsoft.modelo.Usuarios;
 import com.testviewsoft.modelo.Usuarios;
 import com.testviewsoft.modelo.UsuariosPaises;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
-import org.hibernate.HibernateException;
 
 /**
  *
@@ -74,8 +65,19 @@ public class UsuariosBean {
         this.usuario.setDocumentosIdentidad(documentoIdentidad);
     }
 
-    public void insertar(){
+    public void insertar(List<UsuariosPaises> lista){
         Log("METODO INSERTAR USUARIO");
+        UsuariosDao usuariosDao=new UsuariosDaoImpl();
+        Date tiempo=new Date();
+        usuario.setEstado(Boolean.TRUE);
+        usuario.setTiempoEstado(tiempo);
+        Log(usuario.toString());
+        usuariosDao.registrar(usuario);
+        FacesContext context = FacesContext.getCurrentInstance(); 
+        context.addMessage("grwForMensajeConfirmacion",new FacesMessage("REGISTRO DE USUARIO","Fue Actualizado Exitosamente...!"));        
+    }
+    public void insertar(){
+        Log("METODO INSERTAR SIN parametro USUARIO");
         UsuariosDao usuariosDao=new UsuariosDaoImpl();
         Date tiempo=new Date();
         usuario.setEstado(Boolean.TRUE);
@@ -123,7 +125,10 @@ public class UsuariosBean {
         UsuariosDao usuariosDao=new UsuariosDaoImpl();
         usuario=usuariosDao.buscarPorId(id);
     }
+    public void prueba(){
+        Log("ACCION EJECUTADA");        
     
+    }
     public void Log(String msn){
         Logger.getLogger(getClass().getName()).log(Level.WARNING, "<<<<[[[["+msn.toUpperCase()+"]]]]>>>>");
     }

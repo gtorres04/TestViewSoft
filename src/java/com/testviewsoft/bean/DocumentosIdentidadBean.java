@@ -102,7 +102,7 @@ public class DocumentosIdentidadBean {
         documentoIdentidad=documentosIdentidadDao.buscarPorId(id);
     }
     public List<SelectItem> listaItemsDocumentosIdentidad(){
-        Log("METODO listaItemsPaises() DEL UsuarioPaisesBean");
+        Log("METODO listaItemsDOCUMENTOSIDENTIDAD() DEL DOCUMENTOSIDENTIDADBean");
         DocumentosIdentidadDao documentosIdentidadDao=new DocumentosIdentidadDaoImpl();;
         List<SelectItem> lista=new ArrayList<SelectItem>();
         for (int i = 0; i < documentosIdentidadDao.buscarTodos().size(); i++) {
