@@ -56,11 +56,9 @@
                         </p:column>
                     </p:dataTable>
                     
-                    
-                    
                 </h:panelGrid>
                 <p:separator/>
-                <p:commandButton value="&nbsp;Guardar2" process="@this inpTxtIdMail cldrIdFechaNacimiento slct1MnIdSexo inpTxtIdApellido inpTxtIdNombre inpTxtIdReferenciaIdentificacion slct1MnIdListaDocumentosIdentidad" action="#{usuariosPaisesBean.insertar()}" image="icon-save" title="Guardar"/>
+                <p:commandButton value="&nbsp;Guardar2" oncomplete="dlgWgvNuevoUsuario.hide()" update="frmIdNuevoUsuario" process="@this inpTxtIdMail cldrIdFechaNacimiento slct1MnIdSexo inpTxtIdApellido inpTxtIdNombre inpTxtIdReferenciaIdentificacion slct1MnIdListaDocumentosIdentidad" action="#{usuariosPaisesBean.insertar()}" image="icon-save" title="Guardar"/>
                 <p:commandButton value="&nbsp;Cancelar" oncomplete="dlgWgvNuevoUsuario.hide()" image="icon-cancel" title="Cancel"/>
                 <p:messages autoUpdate="true" />
             </p:dialog>

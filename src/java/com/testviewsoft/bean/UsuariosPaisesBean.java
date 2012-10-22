@@ -45,12 +45,15 @@ public class UsuariosPaisesBean implements Serializable{
      */
     public UsuariosPaisesBean() {
         Log("Se crea un objeto UsuarioPaisesBean");
+        inicializar();
+    }
+    public void inicializar(){
+        idDocumentoIdentificacion=null;
         usuarioPais=new UsuariosPaises();
         usuarioPais.setUsuarios(new Usuarios());
         usuariosPaises=new ArrayList<UsuariosPaises>();
         usuarios=new Usuarios();
     }
-
     public Usuarios getUsuarios() {
         return usuarios;
     }
@@ -148,6 +151,7 @@ public class UsuariosPaisesBean implements Serializable{
             Log(usuarioPais.getPaises().toString());
             System.out.println("AQUI");
         }
+        inicializar();
         FacesContext context = FacesContext.getCurrentInstance(); 
         context.addMessage("grwForMensajeConfirmacion",new FacesMessage("REGISTRO DE USUARIO PAISES","Fue Registrado Exitosamente...!"));        
     }
