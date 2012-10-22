@@ -1,5 +1,5 @@
 package com.testviewsoft.modelo;
-// Generated 27-oct-2012 18:57:02 by Hibernate Tools 3.2.1.GA
+// Generated 21-oct-2012 20:00:25 by Hibernate Tools 3.2.1.GA
 
 
 import java.util.Date;
@@ -10,7 +10,7 @@ import java.util.Date;
 public class UsuariosPaises  implements java.io.Serializable {
 
 
-     private UsuariosPaisesId id;
+     private Integer id;
      private Usuarios usuarios;
      private Paises paises;
      private String gentilicio;
@@ -21,13 +21,11 @@ public class UsuariosPaises  implements java.io.Serializable {
     }
 
 	
-    public UsuariosPaises(UsuariosPaisesId id, Usuarios usuarios, Paises paises) {
-        this.id = id;
+    public UsuariosPaises(Usuarios usuarios, Paises paises) {
         this.usuarios = usuarios;
         this.paises = paises;
     }
-    public UsuariosPaises(UsuariosPaisesId id, Usuarios usuarios, Paises paises, String gentilicio, Boolean estado, Date tiempoEstado) {
-       this.id = id;
+    public UsuariosPaises(Usuarios usuarios, Paises paises, String gentilicio, Boolean estado, Date tiempoEstado) {
        this.usuarios = usuarios;
        this.paises = paises;
        this.gentilicio = gentilicio;
@@ -35,11 +33,11 @@ public class UsuariosPaises  implements java.io.Serializable {
        this.tiempoEstado = tiempoEstado;
     }
    
-    public UsuariosPaisesId getId() {
+    public Integer getId() {
         return this.id;
     }
     
-    public void setId(UsuariosPaisesId id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     public Usuarios getUsuarios() {
@@ -76,11 +74,6 @@ public class UsuariosPaises  implements java.io.Serializable {
     
     public void setTiempoEstado(Date tiempoEstado) {
         this.tiempoEstado = tiempoEstado;
-    }
-
-    @Override
-    public String toString() {
-        return "UsuariosPaises{" + "id=" + id + ", usuarios=" + usuarios.toString() + ", paises=" + paises.toString() + ", gentilicio=" + gentilicio + ", estado=" + estado + ", tiempoEstado=" + tiempoEstado + '}';
     }
 
 

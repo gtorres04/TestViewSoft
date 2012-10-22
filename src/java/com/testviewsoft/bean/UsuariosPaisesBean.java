@@ -14,7 +14,6 @@ import com.testviewsoft.modelo.DocumentosIdentidad;
 import com.testviewsoft.modelo.Paises;
 import com.testviewsoft.modelo.Usuarios;
 import com.testviewsoft.modelo.UsuariosPaises;
-import com.testviewsoft.modelo.UsuariosPaisesId;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -139,11 +138,12 @@ public class UsuariosPaisesBean implements Serializable{
         this.usuarioPais.getUsuarios().setTiempoEstado(tiempo);
         usuariosDao.registrar(this.usuarioPais.getUsuarios());
         Usuarios usuarios=usuariosDao.buscarPorReferenciaIdentificacionTipoDocumento(this.usuarioPais.getUsuarios().getReferenciaIdentificacion());
+        if(usuariosPaises.size()!=0)
         for (int i = 0; i < usuariosPaises.size(); i++) {
             UsuariosPaises usuarioPais = usuariosPaises.get(i);
             usuarioPais.setUsuarios(usuarios);
-            UsuariosPaisesId upid=new UsuariosPaisesId();
-            upid.setPaisesId(i);
+            usuarioPais.setEstado(Boolean.TRUE);
+            usuarioPais.setTiempoEstado(new Date());
             usuariosPaisesDao.registrar(usuarioPais);
             Log(usuarioPais.getPaises().toString());
             System.out.println("AQUI");

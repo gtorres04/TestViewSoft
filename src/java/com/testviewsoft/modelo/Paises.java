@@ -1,5 +1,5 @@
 package com.testviewsoft.modelo;
-// Generated 27-oct-2012 18:57:02 by Hibernate Tools 3.2.1.GA
+// Generated 21-oct-2012 20:00:25 by Hibernate Tools 3.2.1.GA
 
 
 import java.util.Date;
@@ -66,11 +66,6 @@ public class Paises  implements java.io.Serializable {
     
     public void setUsuariosPaiseses(Set<UsuariosPaises> usuariosPaiseses) {
         this.usuariosPaiseses = usuariosPaiseses;
-    }
-
-    @Override
-    public String toString() {
-        return "Paises{" + "id=" + id + ", nombre=" + nombre + ", estado=" + estado + ", tiempoEstado=" + tiempoEstado + ", usuariosPaiseses=" + usuariosPaiseses + '}';
     }
 
 

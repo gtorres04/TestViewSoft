@@ -1,48 +1,47 @@
-<?xml version="1.0"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-<!-- Generated 27-oct-2012 18:57:04 by Hibernate Tools 3.2.1.GA -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 21-oct-2012 20:00:26 by Hibernate Tools 3.2.1.GA -->
 <hibernate-mapping>
-    <class name="com.testviewsoft.modelo.Usuarios" table="usuarios" catalog="testviewsoft">
-        <id name="id" type="java.lang.Integer">
-            <column name="id" />
-            <generator class="identity" />
-        </id>
-        <many-to-one name="documentosIdentidad" class="com.testviewsoft.modelo.DocumentosIdentidad" fetch="select">
-            <column name="tipo_identificacion" not-null="true" />
-        </many-to-one>
-        <property name="referenciaIdentificacion" type="string">
-            <column name="referencia_identificacion" length="45" not-null="true" />
-        </property>
-        <property name="nombre" type="string">
-            <column name="nombre" length="45" />
-        </property>
-        <property name="apellido" type="string">
-            <column name="apellido" length="45" />
-        </property>
-        <property name="fechaNacimiento" type="date">
-            <column name="fecha_nacimiento" length="10" />
-        </property>
-        <property name="sexo" type="string">
-            <column name="sexo" length="45" />
-        </property>
-        <property name="mail" type="string">
-            <column name="mail" length="45" />
-        </property>
-        <property name="nacionalidad" type="java.lang.Integer">
-            <column name="nacionalidad" />
-        </property>
-        <property name="estado" type="java.lang.Boolean">
-            <column name="estado" />
-        </property>
-        <property name="tiempoEstado" type="timestamp">
-            <column name="tiempo_estado" length="19" />
-        </property>
-        <set name="usuariosPaiseses" inverse="true">
-            <key>
-                <column name="usuarios_id" not-null="true" />
-            </key>
-            <one-to-many  class="com.testviewsoft.modelo.UsuariosPaises" />
-        </set>
-    </class>
+  <class catalog="testviewsoft" name="com.testviewsoft.modelo.Usuarios" table="usuarios">
+    <id name="id" type="java.lang.Integer">
+      <column name="id"/>
+      <generator class="identity"/>
+    </id>
+    <many-to-one class="com.testviewsoft.modelo.DocumentosIdentidad" fetch="select" name="documentosIdentidad">
+      <column name="tipo_identificacion" not-null="true"/>
+    </many-to-one>
+    <property name="referenciaIdentificacion" type="string">
+      <column length="45" name="referencia_identificacion" not-null="true"/>
+    </property>
+    <property name="nombre" type="string">
+      <column length="45" name="nombre"/>
+    </property>
+    <property name="apellido" type="string">
+      <column length="45" name="apellido"/>
+    </property>
+    <property name="fechaNacimiento" type="date">
+      <column length="10" name="fecha_nacimiento"/>
+    </property>
+    <property name="sexo" type="string">
+      <column length="45" name="sexo"/>
+    </property>
+    <property name="mail" type="string">
+      <column length="45" name="mail"/>
+    </property>
+    <property name="nacionalidad" type="java.lang.Integer">
+      <column name="nacionalidad"/>
+    </property>
+    <property name="estado" type="java.lang.Boolean">
+      <column name="estado"/>
+    </property>
+    <property name="tiempoEstado" type="timestamp">
+      <column length="19" name="tiempo_estado"/>
+    </property>
+    <set inverse="true" name="usuariosPaiseses">
+      <key>
+        <column name="usuarios_id" not-null="true"/>
+      </key>
+      <one-to-many class="com.testviewsoft.modelo.UsuariosPaises"/>
+    </set>
+  </class>
 </hibernate-mapping>
