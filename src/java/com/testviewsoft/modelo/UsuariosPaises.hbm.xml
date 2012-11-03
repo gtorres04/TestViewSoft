@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 27-oct-2012 18:57:04 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.testviewsoft.modelo.UsuariosPaises" table="usuarios_paises" catalog="testviewsoft">
+        <composite-id name="id" class="com.testviewsoft.modelo.UsuariosPaisesId">
+            <key-property name="usuariosId" type="int">
+                <column name="usuarios_id" />
+            </key-property>
+            <key-property name="paisesId" type="int">
+                <column name="paises_id" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="usuarios" class="com.testviewsoft.modelo.Usuarios" update="false" insert="false" fetch="select">
+            <column name="usuarios_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="paises" class="com.testviewsoft.modelo.Paises" update="false" insert="false" fetch="select">
+            <column name="paises_id" not-null="true" />
+        </many-to-one>
+        <property name="gentilicio" type="string">
+            <column name="gentilicio" length="45" />
+        </property>
+        <property name="estado" type="java.lang.Boolean">
+            <column name="estado" />
+        </property>
+        <property name="tiempoEstado" type="timestamp">
+            <column name="tiempo_estado" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>

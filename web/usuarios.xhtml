@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Usuarios</title>
+        <link rel="stylesheet" href="resource/css/estilos.css"/>    
+    </h:head>
+    <h:body>
+        <h:form id="idFrmBtnNuevoUsuario" style="text-align: center">
+            <p:commandButton value="Nuevo Usuario" image="icon-add" oncomplete="dlgWgvNuevoUsuario.show()" update=":frmIdNuevoUsuario"/>
+        </h:form>
+        <!--MENSAJE DE CONFIRMACION-->
+        <p:growl life="3000" for="grwForMensajeConfirmacion" id="grwIdMensajeConfirmacion" showDetail="true"/>
+        <!--FORMULARIO DE NUEVO USUARIO-->
+        <h:form id="frmIdNuevoUsuario">
+            <p:dialog header="Registrar Usuario" widgetVar="dlgWgvNuevoUsuario" resizable="false" id="dlgIdNuevoUsuario" modal="true">  
+                     
+                <h:panelGrid id="pnlGrdIdTablaFomularioNuevoUsuario" columns="2" cellpadding="4" style="margin:0 auto;">        
+                    <h:outputText value="Tipo Identificacion" />
+                    <h:outputText value="Identificación" />
+                    <p:selectOneMenu id="slct1MnIdListaDocumentosIdentidad" value="#{usuariosBean.idDocumentoIdentificacion}">  
+                        <f:selectItem itemLabel="--Seleccione--" itemValue="" />  
+                        <f:selectItems value="#{documentosIdentidadBean.listaItemsDocumentosIdentidad()}"/> 
+                    </p:selectOneMenu>
+                    <p:inputText value="#{usuariosBean.usuario.referenciaIdentificacion}" style="width:200px"/> 
+                    
+                    <h:outputText value="Nombre:" />
+                    <p:inputText value="#{usuariosBean.usuario.nombre}" style="width:200px"/>  
+                    <h:outputText value="Apellido:" />  
+                    <p:inputText value="#{usuariosBean.usuario.apellido}" style="width:200px"/>  
+                    
+                    <h:outputText value="Sexo:" />
+                    <p:selectOneMenu id="city" value="#{usuariosBean.usuario.sexo}">  
+                        <f:selectItem itemLabel="M" itemValue="M" />  
+                        <f:selectItem itemLabel="F" itemValue="F" />  
+                    </p:selectOneMenu>
+                    <h:outputText value="Fecha de Nacimiento:" />
+                    <p:calendar value="#{usuariosBean.usuario.fechaNacimiento}" mode="popup" showOn="button" navigator="true" />
+                    <h:outputText value="E-Mail" />
+                    <p:inputText value="#{usuariosBean.usuario.mail}" style="width:200px"/> 
+                    <h:outputText value="Pais" />
+                    <p:selectOneMenu id="slct1MnIdNuevoUsuarioListaPaises" value="#{usuariosPaisesBean.idPais}">  
+                        <f:selectItem itemLabel="--Seleccione--" itemValue="" />  
+                        <f:selectItems value="#{usuariosPaisesBean.listaItemsPaises()}"/>  
+                        <p:ajax listener="#{usuariosPaisesBean.agregarPais()}" update="slct1MnIdNuevoUsuarioListaPaises tabla"/>
+                    </p:selectOneMenu>
+                    <p:dataTable id="tabla" var="usuarioPais" onExpandStart="#{usuariosPaisesBean.usuariosPaises}" value="#{usuariosPaisesBean.usuariosPaises}" emptyMessage="No Nacionalidad." paginator="true" rows="15" paginatorPosition="bottom">
+                        <p:column headerText="Nacionalidad">
+                            <h:outputText  value="#{usuarioPais.paises.nombre}"/>
+                        </p:column>
+                        <p:column style="width:12%; text-align: center" headerText="Eliminar">  
+                            <p:commandButton update=":frmIdConfirmarEliminar" image="icon-delete" title="Eliminar"/>    
+                        </p:column>
+                    </p:dataTable>
+                    <p:messages autoUpdate="true"/> 
+                </h:panelGrid>
+                <p:separator/>
+                
+                <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion, :frmIdlistaUsuarios, frmIdNuevoUsuario" action="#{usuariosBean.insertar()}" oncomplete="dlgWgvNuevoUsuario.hide()" image="icon-save" title="Guardar"/>
+                <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaUsuarios" oncomplete="dlgWgvNuevoUsuario.hide()" image="icon-cancel" title="Cancel"/>
+                <p:messages autoUpdate="true" />
+            </p:dialog>
+        </h:form>
+        <br/>
+        <!--LISTADO DE LOS DOCUMENTOS DE IDENTIDAD-->
+        <h:form id="frmIdlistaUsuarios">
+            <p:dataTable var="usuario" onExpandStart="#{usuariosBean.usuarios}" value="#{usuariosBean.usuarios}" emptyMessage="No Usuario." paginator="true" rows="15"  
+                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="5,10,15" paginatorPosition="bottom">  
+                
+                <p:column headerText="Identificación">  
+                    <h:outputText value="#{usuario.referenciaIdentificacion}" />  
+                </p:column>  
+                <p:column headerText="Nombre">  
+                    <h:outputText value="#{usuario.nombre}" />  
+                </p:column>  
+                <p:column headerText="Apellido">  
+                    <h:outputText value="#{usuario.apellido}" />  
+                </p:column>
+                <p:column headerText="Sexo">  
+                    <h:outputText value="#{usuario.sexo}" />  
+                </p:column>
+                <p:column headerText="Fecha de Nacimiento">  
+                    <h:outputText value="#{usuario.fechaNacimiento.toString()}" />  
+                </p:column>
+                <p:column headerText="E-Mail">  
+                    <h:outputText value="#{usuario.mail}" />  
+                </p:column>
+                <p:column style="width:12%; text-align: center" headerText="Opciones">  
+                    <p:commandButton oncomplete="dlgWgvEditarUsuario.show()" update=":frmIdEditarUsuario:dlgIdEditarUsuario" action="#{usuariosBean.prepararActualizacion(usuario.id)}" image="icon-edit" title="Editar"/>
+                    <p:commandButton oncomplete="confDlgWgvConfirmarEliminar.show()" update=":frmIdConfirmarEliminar" action="#{usuariosBean.prepararEliminacion(usuario.id)}" image="icon-delete" title="Eliminar"/>    
+                </p:column>
+                
+            </p:dataTable>
+        </h:form>
+        <!--FORMULARIO MODIFICAR DOCUMENTO DE IDENTIDAD-->
+        <h:form id="frmIdEditarUsuario">
+            <p:dialog header="Actualizar Usuario" widgetVar="dlgWgvEditarUsuario" resizable="false" id="dlgIdEditarUsuario" modal="true">  
+                <h:inputHidden value="#{usuariosBean.usuario.id}"/>
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+                    <h:outputText value="Tipo Identificacion" />
+                    <h:outputText value="Identificación" />
+                    <p:selectOneMenu id="slct1MnIdListaDocumentosIdentidad" value="#{usuariosBean.idDocumentoIdentificacion}">  
+                        <f:selectItem itemLabel="--Seleccione--" itemValue="" />  
+                        <f:selectItems />     
+                        <p:ajax />  
+                    </p:selectOneMenu>
+                    <p:inputText value="#{usuariosBean.usuario.referenciaIdentificacion}" style="width:200px"/> 
+                    
+                    <h:outputText value="Nombre:" />
+                    <p:inputText value="#{usuariosBean.usuario.nombre}" style="width:200px"/>  
+                    <h:outputText value="Apellido:" />  
+                    <p:inputText value="#{usuariosBean.usuario.apellido}" style="width:200px"/>  
+                    
+                    <h:outputText value="Sexo:" />
+                    <p:selectOneMenu id="city" value="#{usuariosBean.usuario.sexo}">  
+                        <f:selectItem itemLabel="M" itemValue="M" />  
+                        <f:selectItem itemLabel="F" itemValue="F" />  
+                    </p:selectOneMenu>
+                    <h:outputText value="Fecha de Nacimiento:" />
+                    <p:calendar value="#{usuariosBean.usuario.fechaNacimiento}" mode="popup" showOn="button" navigator="true" />
+                    <h:outputText value="E-Mail" />
+                    <p:inputText value="#{usuariosBean.usuario.mail}" style="width:200px"/> 
+                    <p:messages autoUpdate="true"/> 
+                    <h:outputText value="Pais" />
+                    <p:selectOneMenu id="slct1MnIdEditarUsuarioListaPaises">  
+                        <f:selectItem itemLabel="--Seleccione--" itemValue="#{usuariosPaisesBean.idPais}" />  
+                        <f:selectItems value="#{paisesBean.paises}" var="pais" itemLabel="#{pais.nombre}" itemValue="#{pais.id}" />  
+                        <p:ajax update="slct1MnIdEditarUsuarioListaPaises frmIdEditarUsuario"/>
+                    </p:selectOneMenu>
+                    <p:dataTable var="usuarioPais" onExpandStart="#{usuariosBean.usuario.usuariosPaiseses}" value="#{usuariosBean.usuario.usuariosPaiseses}" emptyMessage="No Nacionalidad." paginator="true" rows="15" paginatorPosition="bottom">
+                        <p:column headerText="Nacionalidad">
+                            <h:outputText  />
+                        </p:column>
+                        <p:column style="width:12%; text-align: center" headerText="Eliminar">  
+                            <p:commandButton update=":frmIdConfirmarEliminar" image="icon-delete" title="Eliminar"/>    
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>  
+                <p:separator/>
+                <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaUsuarios" action="#{usuariosBean.actualizar()}" oncomplete="dlgWgvEditarUsuario.hide()" image="icon-save" title="Guardar"/>
+                <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaUsuarios" oncomplete="dlgWgvEditarUsuario.hide()" image="icon-cancel" title="Cancel"/>
+                
+            </p:dialog>
+        </h:form>
+        <!-- vista Confirmar Eliminacion-->
+        <h:form id="frmIdConfirmarEliminar">
+            
+            <p:confirmDialog header="Eliminar Usuario" severity="alert"
+            widgetVar="confDlgWgvConfirmarEliminar">
+                <h:inputHidden value="#{usuariosBean.usuario.id}"/>
+                <h:inputHidden value="#{usuariosBean.usuario.nombre}"/>
+                <f:facet name="message">
+                    <h:outputText value="Confirme Eliminar el Usuario [ #{usuariosBean.usuario.nombre} ]"/>
+                </f:facet>
+                <p:commandButton value="Aceptar" action="#{usuariosBean.eliminar(usuariosBean.usuario.id)}" update=":frmIdlistaUsuarios" oncomplete="confDlgWgvConfirmarEliminar.hide()"/>
+                <p:commandButton value="Cancelar" onclick="confDlgWgvConfirmarEliminar.hide();" type="button" />
+            </p:confirmDialog>
+        </h:form>
+    </h:body>
+</html>

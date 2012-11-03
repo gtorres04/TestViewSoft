@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Paises</title>
+        <link rel="stylesheet" href="resource/css/estilos.css"/>    
+    </h:head>
+    <h:body>
+        <h:form id="idFrmBtnNuevoPais" style="text-align: center">
+            <p:commandButton value="Nuevo Pais" image="icon-add" oncomplete="dlgWgvNuevoPais.show()" update=":frmIdNuevoPais"/>
+        </h:form>
+        <!--MENSAJE DE CONFIRMACION-->
+        <p:growl life="3000" for="grwForMensajeConfirmacion" id="grwIdMensajeConfirmacion" showDetail="true"/>
+        <!--FORMULARIO DE NUEVO DOCUMENTO DE IDENTIDAD-->
+        <h:form id="frmIdNuevoPais">
+            <p:dialog header="Registrar Pais" widgetVar="dlgWgvNuevoPais" resizable="false" id="dlgIdNuevoPais" modal="true">  
+                     
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">        
+                    <h:outputText value="Nombre:" /> 
+                    <p:inputText value="#{paisesBean.pais.nombre}" style="width:200px"/>  
+                </h:panelGrid>  
+                <p:separator/>
+                <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaPaises" action="#{paisesBean.insertar()}" oncomplete="dlgWgvNuevoPais.hide()" image="icon-save" title="Guardar"/>
+                <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaPaises" oncomplete="dlgWgvNuevoPais.hide()" image="icon-cancel" title="Cancel"/>
+                
+            </p:dialog>
+        </h:form>
+        <br/>
+        <!--LISTADO DE LOS DOCUMENTOS DE IDENTIDAD-->
+        <h:form id="frmIdlistaPaises">
+            <p:dataTable var="pais" onExpandStart="#{paisesBean.paises}" value="#{paisesBean.paises}" emptyMessage="No Pais." paginator="true" rows="15"  
+                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
+                 rowsPerPageTemplate="5,10,15" paginatorPosition="bottom">  
+                
+                <p:column headerText="ID">  
+                    <h:outputText value="#{pais.id}" />  
+                </p:column>  
+                <p:column headerText="Nombre">  
+                    <h:outputText value="#{pais.nombre}" />  
+                </p:column>  
+                
+                <p:column style="width:12%; text-align: center" headerText="Opciones">  
+                    <p:commandButton oncomplete="dlgWgvEditarPais.show()" update=":frmIdEditarPais:dlgIdEditarPais" action="#{paisesBean.prepararActualizacion(pais.id)}" image="icon-edit" title="Editar"/>
+                    <p:commandButton oncomplete="confDlgWgvConfirmarEliminar.show()" update=":frmIdCofirmarEliminar" action="#{paisesBean.prepararEliminacion(pais.id)}" image="icon-delete" title="Eliminar"/>    
+                </p:column>
+                
+            </p:dataTable>
+        </h:form>
+        <!--FORMULARIO MODIFICAR DOCUMENTO DE IDENTIDAD-->
+        <h:form id="frmIdEditarPais">
+            <p:dialog header="Actualizar Pais" widgetVar="dlgWgvEditarPais" resizable="false" id="dlgIdEditarPais" modal="true">  
+                <h:inputHidden value="#{paisesBean.pais.id}"/>
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+                    <h:outputText value="Nombre:" /> 
+                    <p:inputText value="#{paisesBean.pais.nombre}" style="width:200px"/>  
+                </h:panelGrid>  
+                <p:separator/>
+                <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaPaises" action="#{paisesBean.actualizar()}" oncomplete="dlgWgvEditarPais.hide()" image="icon-save" title="Guardar"/>
+                <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaPaises" oncomplete="dlgWgvEditarPais.hide()" image="icon-cancel" title="Cancel"/>
+                
+            </p:dialog>
+        </h:form>
+        <!-- vista Confirmar Eliminacion-->
+        <h:form id="frmIdCofirmarEliminar">
+            
+            <p:confirmDialog header="Eliminar Pais" severity="alert"
+            widgetVar="confDlgWgvConfirmarEliminar">
+                <h:inputHidden value="#{paisesBean.pais.id}"/>
+                <h:inputHidden value="#{paisesBean.pais.nombre}"/>
+                <f:facet name="message">
+                    <h:outputText value="Confirme Eliminar el Pais [ #{paisesBean.pais.nombre} ]"/>
+                </f:facet>
+                <p:commandButton value="Aceptar" action="#{paisesBean.eliminar(paisesBean.pais.id)}" update=":frmIdlistaPaises" oncomplete="confDlgWgvConfirmarEliminar.hide()"/>
+                <p:commandButton value="Cancelar" onclick="confDlgWgvConfirmarEliminar.hide();" type="button" />
+            </p:confirmDialog>
+        </h:form>
+    </h:body>
+</html>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 27-oct-2012 18:57:04 by Hibernate Tools 3.2.1.GA -->
+<hibernate-mapping>
+    <class name="com.testviewsoft.modelo.Paises" table="paises" catalog="testviewsoft">
+        <id name="id" type="java.lang.Integer">
+            <column name="id" />
+            <generator class="identity" />
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="45" not-null="true" />
+        </property>
+        <property name="estado" type="java.lang.Boolean">
+            <column name="estado" />
+        </property>
+        <property name="tiempoEstado" type="timestamp">
+            <column name="tiempo_estado" length="19" />
+        </property>
+        <set name="usuariosPaiseses" inverse="true">
+            <key>
+                <column name="paises_id" not-null="true" />
+            </key>
+            <one-to-many class="com.testviewsoft.modelo.UsuariosPaises" />
+        </set>
+    </class>
+</hibernate-mapping>

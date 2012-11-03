@@ -1,0 +1,17 @@
+.ui-state-default .icon-add{
+    background-image: url(../img/Add-User.png);
+}
+
+.ui-state-default .icon-edit{
+    background-image: url(../img/Edit-User.png);
+}
+
+.ui-state-default .icon-delete{
+    background-image: url(../img/Remove-User.png);
+}
+.ui-state-default .icon-save{
+    background-image: url(../img/Accept-User.png);
+}
+.ui-state-default .icon-cancel{
+    background-image: url(../img/cancel.png);
+}
