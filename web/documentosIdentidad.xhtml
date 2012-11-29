@@ -17,15 +17,13 @@
         <!--FORMULARIO DE NUEVO DOCUMENTO DE IDENTIDAD-->
         <h:form id="frmIdNuevoDocumentoIdentidad">
             <p:dialog header="Registrar Documentos de Identidad" widgetVar="dlgWgvNuevoDocumentoIdentidad" resizable="false" id="dlgIdNuevoDocumentoIdentidad" modal="true">  
-                     
                 <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">        
                     <h:outputText value="Nombre:" /> 
-                    <p:inputText value="#{documentosIdentidadBean.documentoIdentidad.nombre}" style="width:200px"/>  
+                    <p:inputText required="true" id="inpTxtIdNombreDocumentoIdentidad" value="#{documentosIdentidadBean.documentoIdentidad.nombre}" style="width:200px"/>  
                 </h:panelGrid>  
                 <p:separator/>
-                <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaDocumentosIdentidad" action="#{documentosIdentidadBean.insertar()}" oncomplete="dlgWgvNuevoDocumentoIdentidad.hide()" image="icon-save" title="Guardar"/>
+                <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaDocumentosIdentidad frmIdNuevoDocumentoIdentidad" action="#{documentosIdentidadBean.insertar()}" oncomplete="handleLoginRequest(xhr, status, args,1)" image="icon-save" title="Guardar"/>
                 <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaDocumentosIdentidad" oncomplete="dlgWgvNuevoDocumentoIdentidad.hide()" image="icon-cancel" title="Cancel"/>
-                
             </p:dialog>
         </h:form>
         <br/>
@@ -55,10 +53,10 @@
                 <h:inputHidden value="#{documentosIdentidadBean.documentoIdentidad.id}"/>
                 <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
                     <h:outputText value="Nombre:" /> 
-                    <p:inputText value="#{documentosIdentidadBean.documentoIdentidad.nombre}" style="width:200px"/>  
+                    <p:inputText required="true" id="inpTxtIdNombreDocumentoIdentidadEditar" value="#{documentosIdentidadBean.documentoIdentidad.nombre}" style="width:200px"/>  
                 </h:panelGrid>  
                 <p:separator/>
-                <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaDocumentosIdentidad" action="#{documentosIdentidadBean.actualizar()}" oncomplete="dlgWgvEditarDocumentoIdentidad.hide()" image="icon-save" title="Guardar"/>
+                <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaDocumentosIdentidad frmIdEditarDocumentoIdentidad" action="#{documentosIdentidadBean.actualizar()}" oncomplete="handleLoginRequest(xhr, status, args,2)" image="icon-save" title="Guardar"/>
                 <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaDocumentosIdentidad" oncomplete="dlgWgvEditarDocumentoIdentidad.hide()" image="icon-cancel" title="Cancel"/>
                 
             </p:dialog>
@@ -75,6 +73,32 @@
                 <p:commandButton value="Cancelar" onclick="confDlgWgvConfirmarEliminar.hide();" type="button" />
             </p:confirmDialog>
         </h:form>
+        <script type="text/javascript">
+            function registrar(args){
+                if(args.validationFailed){
+                    dlgWgvNuevoDocumentoIdentidad.show();
+                }else{
+                    dlgWgvNuevoDocumentoIdentidad.hide();
+                }
+            }
+            function editar(args){
+                if(args.validationFailed){
+                    dlgWgvEditarDocumentoIdentidad.show();
+                }else{
+                    dlgWgvEditarDocumentoIdentidad.hide();
+                }
+            }
+            function handleLoginRequest(xhr, status, args,opcion) {
+                switch(opcion){
+                    case 1:
+                        registrar(args);
+                    break;
+                    case 2:
+                        editar(args);
+                    break;
+                }
+            }  
+        </script>
     </h:body>
 </html>
 

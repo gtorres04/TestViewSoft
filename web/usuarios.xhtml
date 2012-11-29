@@ -16,53 +16,53 @@
         <p:growl life="3000" for="grwForMensajeConfirmacion" id="grwIdMensajeConfirmacion" showDetail="true"/>
         <!--FORMULARIO DE NUEVO USUARIO-->
         <h:form id="frmIdNuevoUsuario">
-            <p:dialog header="Registrar Usuario" widgetVar="dlgWgvNuevoUsuario" resizable="false" id="dlgIdNuevoUsuario" modal="true">  
-                     
+            <p:dialog closable="false" header="Registrar Usuario" widgetVar="dlgWgvNuevoUsuario" resizable="false" id="dlgIdNuevoUsuario" modal="true">  
                 <h:panelGrid id="pnlGrdIdTablaFomularioNuevoUsuario" columns="2" cellpadding="4" style="margin:0 auto;">        
                     <h:outputText value="Tipo Identificacion" />
                     <h:outputText value="Identificación" />
-                    <p:selectOneMenu id="slct1MnIdListaDocumentosIdentidad" value="#{usuariosBean.idDocumentoIdentificacion}">  
+                    <p:selectOneMenu id="slct1MnIdListaDocumentosIdentidad" value="#{usuariosPaisesBean.idDocumentoIdentificacion}" required="true">  
                         <f:selectItem itemLabel="--Seleccione--" itemValue="" />  
                         <f:selectItems value="#{documentosIdentidadBean.listaItemsDocumentosIdentidad()}"/> 
                     </p:selectOneMenu>
-                    <p:inputText value="#{usuariosBean.usuario.referenciaIdentificacion}" style="width:200px"/> 
-                    
+                    <p:inputText required="true" id="inpTxtIdReferenciaIdentificacion" value="#{usuariosPaisesBean.usuarioPais.usuarios.referenciaIdentificacion}" style="width:200px"/> 
                     <h:outputText value="Nombre:" />
-                    <p:inputText value="#{usuariosBean.usuario.nombre}" style="width:200px"/>  
+                    <p:inputText required="true" id="inpTxtIdNombre" value="#{usuariosPaisesBean.usuarioPais.usuarios.nombre}" style="width:200px"/>
                     <h:outputText value="Apellido:" />  
-                    <p:inputText value="#{usuariosBean.usuario.apellido}" style="width:200px"/>  
+                    <p:inputText required="true" id="inpTxtIdApellido" value="#{usuariosPaisesBean.usuarioPais.usuarios.apellido}" style="width:200px"/>  
                     
                     <h:outputText value="Sexo:" />
-                    <p:selectOneMenu id="city" value="#{usuariosBean.usuario.sexo}">  
+                    <p:selectOneMenu id="slct1MnIdSexo" value="#{usuariosPaisesBean.usuarioPais.usuarios.sexo}">  
                         <f:selectItem itemLabel="M" itemValue="M" />  
                         <f:selectItem itemLabel="F" itemValue="F" />  
                     </p:selectOneMenu>
                     <h:outputText value="Fecha de Nacimiento:" />
-                    <p:calendar value="#{usuariosBean.usuario.fechaNacimiento}" mode="popup" showOn="button" navigator="true" />
+                    <p:calendar id="cldrIdFechaNacimiento" value="#{usuariosPaisesBean.usuarioPais.usuarios.fechaNacimiento}" mode="popup" showOn="button" navigator="false" mindate="01/01/1920" maxdate="01/01/1950" />
                     <h:outputText value="E-Mail" />
-                    <p:inputText value="#{usuariosBean.usuario.mail}" style="width:200px"/> 
+                    <p:inputText id="inpTxtIdMail" value="#{usuariosPaisesBean.usuarioPais.usuarios.mail}" style="width:200px"/> 
+                    
+                    
                     <h:outputText value="Pais" />
                     <p:selectOneMenu id="slct1MnIdNuevoUsuarioListaPaises" value="#{usuariosPaisesBean.idPais}">  
-                        <f:selectItem itemLabel="--Seleccione--" itemValue="" />  
+                        <f:selectItem itemLabel="--Seleccione--" itemValue="0"/>  
                         <f:selectItems value="#{usuariosPaisesBean.listaItemsPaises()}"/>  
-                        <p:ajax listener="#{usuariosPaisesBean.agregarPais()}" update="slct1MnIdNuevoUsuarioListaPaises tabla"/>
+                        <p:ajax listener="#{usuariosPaisesBean.agregarPais()}" update="slct1MnIdNuevoUsuarioListaPaises dttbListaSeleccionPaises"/>
                     </p:selectOneMenu>
-                    <p:dataTable id="tabla" var="usuarioPais" onExpandStart="#{usuariosPaisesBean.usuariosPaises}" value="#{usuariosPaisesBean.usuariosPaises}" emptyMessage="No Nacionalidad." paginator="true" rows="15" paginatorPosition="bottom">
+                    <p:dataTable id="dttbListaSeleccionPaises" var="usuarioPais" onExpandStart="#{usuariosPaisesBean.usuariosPaises}" value="#{usuariosPaisesBean.usuariosPaises}" emptyMessage="No Nacionalidad." paginator="true" rows="15" paginatorPosition="bottom">
                         <p:column headerText="Nacionalidad">
                             <h:outputText  value="#{usuarioPais.paises.nombre}"/>
                         </p:column>
                         <p:column style="width:12%; text-align: center" headerText="Eliminar">  
-                            <p:commandButton update=":frmIdConfirmarEliminar" image="icon-delete" title="Eliminar"/>    
+                            <p:commandButton process="@this" image="icon-delete" title="Eliminar" update=":frmIdNuevoUsuario:slct1MnIdNuevoUsuarioListaPaises dttbListaSeleccionPaises" action="#{usuariosPaisesBean.eliminarSeleccionPais(usuarioPais.paises.id)}"/>    
                         </p:column>
                     </p:dataTable>
-                    <p:messages autoUpdate="true"/> 
+                    
                 </h:panelGrid>
                 <p:separator/>
-                <p:commandButton value="&nbsp;Guardar2" action="#{usuariosBean.prueba()}" image="icon-save" title="Guardar"/>
-                <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaUsuarios" oncomplete="dlgWgvNuevoUsuario.hide()" image="icon-cancel" title="Cancel"/>
-                <p:messages autoUpdate="true" />
+                <p:commandButton partialSubmit="" value="&nbsp;Guardar" update="frmIdNuevoUsuario :frmIdlistaUsuarios" process="@this inpTxtIdMail cldrIdFechaNacimiento slct1MnIdSexo inpTxtIdApellido inpTxtIdNombre inpTxtIdReferenciaIdentificacion slct1MnIdListaDocumentosIdentidad" action="#{usuariosPaisesBean.insertar()}" oncomplete="handleLoginRequest(xhr, status, args,1)" image="icon-save" title="Guardar"/>
+                <p:commandButton value="&nbsp;Cancelar" oncomplete="dlgWgvNuevoUsuario.hide()" update="frmIdNuevoUsuario" process="@this" image="icon-cancel" title="Cancel" action="#{usuariosPaisesBean.cancelar()}"/>
             </p:dialog>
         </h:form>
+        <br/>
         <br/>
         <!--LISTADO DE LOS DOCUMENTOS DE IDENTIDAD-->
         <h:form id="frmIdlistaUsuarios">
@@ -89,75 +89,101 @@
                     <h:outputText value="#{usuario.mail}" />  
                 </p:column>
                 <p:column style="width:12%; text-align: center" headerText="Opciones">  
-                    <p:commandButton oncomplete="dlgWgvEditarUsuario.show()" update=":frmIdEditarUsuario:dlgIdEditarUsuario" action="#{usuariosBean.prepararActualizacion(usuario.id)}" image="icon-edit" title="Editar"/>
-                    <p:commandButton oncomplete="confDlgWgvConfirmarEliminar.show()" update=":frmIdConfirmarEliminar" action="#{usuariosBean.prepararEliminacion(usuario.id)}" image="icon-delete" title="Eliminar"/>    
+                    <p:commandButton oncomplete="dlgWgvEditarUsuario.show()" update=":frmIdEditarUsuario:dlgIdEditarUsuario" action="#{usuariosPaisesBean.prepararActualizacion(usuario.id)}" image="icon-edit" title="Editar"/>
+                    <p:commandButton oncomplete="confDlgWgvConfirmarEliminar.show()" update=":frmIdConfirmarEliminar" action="#{usuariosPaisesBean.prepararEliminacion(usuario.id)}" image="icon-delete" title="Eliminar"/>    
                 </p:column>
                 
             </p:dataTable>
         </h:form>
         <!--FORMULARIO MODIFICAR DOCUMENTO DE IDENTIDAD-->
         <h:form id="frmIdEditarUsuario">
-            <p:dialog header="Actualizar Usuario" widgetVar="dlgWgvEditarUsuario" resizable="false" id="dlgIdEditarUsuario" modal="true">  
-                <h:inputHidden value="#{usuariosBean.usuario.id}"/>
-                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+            <p:dialog closable="false" header="Registrar Usuario" widgetVar="dlgWgvEditarUsuario" resizable="false" id="dlgIdEditarUsuario" modal="true">  
+                <h:panelGrid id="pnlGrdIdTablaFomularioNuevoUsuario" columns="2" cellpadding="4" style="margin:0 auto;">        
                     <h:outputText value="Tipo Identificacion" />
                     <h:outputText value="Identificación" />
-                    <p:selectOneMenu id="slct1MnIdListaDocumentosIdentidad" value="#{usuariosBean.idDocumentoIdentificacion}">  
+                    <p:selectOneMenu id="slct1MnIdListaDocumentosIdentidad" value="#{usuariosPaisesBean.idDocumentoIdentificacion}" required="true">  
                         <f:selectItem itemLabel="--Seleccione--" itemValue="" />  
-                        <f:selectItems />     
-                        <p:ajax />  
+                        <f:selectItems value="#{documentosIdentidadBean.listaItemsDocumentosIdentidad()}"/> 
                     </p:selectOneMenu>
-                    <p:inputText value="#{usuariosBean.usuario.referenciaIdentificacion}" style="width:200px"/> 
-                    
+                    <p:inputText required="true" id="inpTxtIdReferenciaIdentificacion" value="#{usuariosPaisesBean.usuarioPais.usuarios.referenciaIdentificacion}" style="width:200px"/> 
                     <h:outputText value="Nombre:" />
-                    <p:inputText value="#{usuariosBean.usuario.nombre}" style="width:200px"/>  
+                    <p:inputText required="true" id="inpTxtIdNombre" value="#{usuariosPaisesBean.usuarioPais.usuarios.nombre}" style="width:200px"/>
                     <h:outputText value="Apellido:" />  
-                    <p:inputText value="#{usuariosBean.usuario.apellido}" style="width:200px"/>  
+                    <p:inputText required="true" id="inpTxtIdApellido" value="#{usuariosPaisesBean.usuarioPais.usuarios.apellido}" style="width:200px"/>  
                     
                     <h:outputText value="Sexo:" />
-                    <p:selectOneMenu id="city" value="#{usuariosBean.usuario.sexo}">  
+                    <p:selectOneMenu id="slct1MnIdSexo" value="#{usuariosPaisesBean.usuarioPais.usuarios.sexo}">  
                         <f:selectItem itemLabel="M" itemValue="M" />  
                         <f:selectItem itemLabel="F" itemValue="F" />  
                     </p:selectOneMenu>
                     <h:outputText value="Fecha de Nacimiento:" />
-                    <p:calendar value="#{usuariosBean.usuario.fechaNacimiento}" mode="popup" showOn="button" navigator="true" />
+                    <p:calendar id="cldrIdFechaNacimiento" value="#{usuariosPaisesBean.usuarioPais.usuarios.fechaNacimiento}" mode="popup" showOn="button" navigator="false" mindate="01/01/1920" maxdate="01/01/1950" />
                     <h:outputText value="E-Mail" />
-                    <p:inputText value="#{usuariosBean.usuario.mail}" style="width:200px"/> 
-                    <p:messages autoUpdate="true"/> 
+                    <p:inputText id="inpTxtIdMail" value="#{usuariosPaisesBean.usuarioPais.usuarios.mail}" style="width:200px"/> 
+                    
+                    
                     <h:outputText value="Pais" />
-                    <p:selectOneMenu id="slct1MnIdEditarUsuarioListaPaises">  
-                        <f:selectItem itemLabel="--Seleccione--" itemValue="#{usuariosPaisesBean.idPais}" />  
-                        <f:selectItems value="#{paisesBean.paises}" var="pais" itemLabel="#{pais.nombre}" itemValue="#{pais.id}" />  
-                        <p:ajax update="slct1MnIdEditarUsuarioListaPaises frmIdEditarUsuario"/>
+                    <p:selectOneMenu id="slct1MnIdNuevoUsuarioListaPaises" value="#{usuariosPaisesBean.idPais}">  
+                        <f:selectItem itemLabel="--Seleccione--" itemValue="0"/>  
+                        <f:selectItems value="#{usuariosPaisesBean.listaItemsPaises()}"/>  
+                        <p:ajax listener="#{usuariosPaisesBean.agregarPais()}" update="slct1MnIdNuevoUsuarioListaPaises dttbListaSeleccionPaises"/>
                     </p:selectOneMenu>
-                    <p:dataTable var="usuarioPais" onExpandStart="#{usuariosBean.usuario.usuariosPaiseses}" value="#{usuariosBean.usuario.usuariosPaiseses}" emptyMessage="No Nacionalidad." paginator="true" rows="15" paginatorPosition="bottom">
+                    <p:dataTable id="dttbListaSeleccionPaises" var="usuarioPais" onExpandStart="#{usuariosPaisesBean.usuariosPaises}" value="#{usuariosPaisesBean.usuariosPaises}" emptyMessage="No Nacionalidad." paginator="true" rows="15" paginatorPosition="bottom">
                         <p:column headerText="Nacionalidad">
-                            <h:outputText  />
+                            <h:outputText  value="#{usuarioPais.paises.nombre}"/>
                         </p:column>
                         <p:column style="width:12%; text-align: center" headerText="Eliminar">  
-                            <p:commandButton update=":frmIdConfirmarEliminar" image="icon-delete" title="Eliminar"/>    
+                            <p:commandButton process="@this" image="icon-delete" title="Eliminar" update=":frmIdEditarUsuario:slct1MnIdNuevoUsuarioListaPaises dttbListaSeleccionPaises" action="#{usuariosPaisesBean.eliminarSeleccionPais(usuarioPais.paises.id)}"/>    
                         </p:column>
                     </p:dataTable>
-                </h:panelGrid>  
+                    
+                </h:panelGrid>
                 <p:separator/>
-                <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaUsuarios" action="#{usuariosBean.actualizar()}" oncomplete="dlgWgvEditarUsuario.hide()" image="icon-save" title="Guardar"/>
-                <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaUsuarios" oncomplete="dlgWgvEditarUsuario.hide()" image="icon-cancel" title="Cancel"/>
-                
+                <p:commandButton partialSubmit="" value="&nbsp;Guardar" update="frmIdEditarUsuario :frmIdlistaUsuarios" process="@this inpTxtIdMail cldrIdFechaNacimiento slct1MnIdSexo inpTxtIdApellido inpTxtIdNombre inpTxtIdReferenciaIdentificacion slct1MnIdListaDocumentosIdentidad" action="#{usuariosPaisesBean.editar()}" oncomplete="handleLoginRequest(xhr, status, args,2)" image="icon-save" title="Guardar"/>
+                <p:commandButton value="&nbsp;Cancelar" oncomplete="dlgWgvEditarUsuario.hide()" update="frmIdEditarUsuario" process="@this" image="icon-cancel" title="Cancel" action="#{usuariosPaisesBean.cancelar()}"/>
             </p:dialog>
         </h:form>
+        <br/>
         <!-- vista Confirmar Eliminacion-->
         <h:form id="frmIdConfirmarEliminar">
             
             <p:confirmDialog header="Eliminar Usuario" severity="alert"
             widgetVar="confDlgWgvConfirmarEliminar">
-                <h:inputHidden value="#{usuariosBean.usuario.id}"/>
-                <h:inputHidden value="#{usuariosBean.usuario.nombre}"/>
+                <h:inputHidden value="#{usuariosPaisesBean.usuarioPais.usuarios.id}"/>
+                <h:inputHidden value="#{usuariosPaisesBean.usuarioPais.usuarios.nombre}"/>
                 <f:facet name="message">
-                    <h:outputText value="Confirme Eliminar el Usuario [ #{usuariosBean.usuario.nombre} ]"/>
+                    <h:outputText value="Confirme Eliminar el Usuario [ #{usuariosPaisesBean.usuarioPais.usuarios.nombre} ]"/>
                 </f:facet>
-                <p:commandButton value="Aceptar" action="#{usuariosBean.eliminar(usuariosBean.usuario.id)}" update=":frmIdlistaUsuarios" oncomplete="confDlgWgvConfirmarEliminar.hide()"/>
-                <p:commandButton value="Cancelar" onclick="confDlgWgvConfirmarEliminar.hide();" type="button" />
+                <p:commandButton value="Aceptar" action="#{usuariosPaisesBean.eliminar()}" update=":frmIdlistaUsuarios" oncomplete="confDlgWgvConfirmarEliminar.hide()"/>
+                <p:commandButton value="Cancelar" oncomplete="confDlgWgvConfirmarEliminar.hide();" action="#{usuariosPaisesBean.cancelar()}" type="button" />
             </p:confirmDialog>
         </h:form>
+        <script type="text/javascript">
+            function registrar(args){
+                if(args.validationFailed){
+                    
+                    dlgWgvNuevoUsuario.show();
+                }else{
+                    dlgWgvNuevoUsuario.hide();
+                }
+            }
+            function editar(args){
+                if(args.validationFailed){
+                    dlgWgvEditarUsuario.show();
+                }else{
+                    dlgWgvEditarUsuario.hide();
+                }
+            }
+            function handleLoginRequest(xhr, status, args,opcion) {
+                switch(opcion){
+                    case 1:
+                        registrar(args);
+                    break;
+                    case 2:
+                        editar(args);
+                    break;
+                }
+            }  
+        </script>
     </h:body>
 </html>

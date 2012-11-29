@@ -15,7 +15,19 @@ import org.hibernate.Session;
  * @author GerlinOTS
  */
 public class UsuariosPaisesDaoImpl implements UsuariosPaisesDao{
-    Session session=HibernateUtil.getSessionFactory().openSession();
+    private Session session=HibernateUtil.getSessionFactory().openSession();
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public UsuariosPaisesDaoImpl(Session session) {
+        this.session = session;
+    }
+
+    public UsuariosPaisesDaoImpl() {
+    }
+    
     public void registrar(UsuariosPaises usuarioPais) {
         try {
             session.beginTransaction();
@@ -55,5 +67,8 @@ public class UsuariosPaisesDaoImpl implements UsuariosPaisesDao{
 
     public List<UsuariosPaises> buscarTodos() {
         return session.createQuery("FROM UsuariosPaises usuarioPais WHERE usuarioPais.estado="+Boolean.TRUE).list();
+    }
+    public List<UsuariosPaises> buscarPaisesPorIdUsuario(Integer id){
+        return session.createQuery("FROM UsuariosPaises usuarioPais WHERE usuarioPais.estado="+Boolean.TRUE+" AND usuarioPais.usuarios.id="+id).list();
     }
 }

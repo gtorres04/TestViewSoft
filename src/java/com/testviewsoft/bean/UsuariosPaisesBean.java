@@ -10,6 +10,7 @@ import com.testviewsoft.dao.UsuariosPaisesDao;
 import com.testviewsoft.dao.impl.PaisesDaoImpl;
 import com.testviewsoft.dao.impl.UsuariosDaoImpl;
 import com.testviewsoft.dao.impl.UsuariosPaisesDaoImpl;
+import com.testviewsoft.dao.util.HibernateUtil;
 import com.testviewsoft.modelo.DocumentosIdentidad;
 import com.testviewsoft.modelo.Paises;
 import com.testviewsoft.modelo.Usuarios;
@@ -26,6 +27,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import org.hibernate.Session;
 
 /**
  *
@@ -36,23 +38,31 @@ import javax.faces.model.SelectItem;
 public class UsuariosPaisesBean implements Serializable{
     private UsuariosPaises usuarioPais;
     private List<UsuariosPaises> usuariosPaises;
+    private List<UsuariosPaises> usuariosPaisesEliminados;
     private String idPais;
     private String idUsuario;
     private String idDocumentoIdentificacion;
     private Usuarios usuarios;
+    private Session session=HibernateUtil.getSessionFactory().openSession();
     /**
      * Creates a new instance of UsuariosPaisesBean
      */
+    
     public UsuariosPaisesBean() {
         Log("Se crea un objeto UsuarioPaisesBean");
         inicializar();
     }
-    public void inicializar(){
+    private void inicializar(){
+        Log("Se INICIALIZARON LOS VALORES");
         idDocumentoIdentificacion=null;
+        usuariosPaisesEliminados=new ArrayList<UsuariosPaises>();
         usuarioPais=new UsuariosPaises();
         usuarioPais.setUsuarios(new Usuarios());
         usuariosPaises=new ArrayList<UsuariosPaises>();
         usuarios=new Usuarios();
+    }
+    public void cancelar(){
+        inicializar();
     }
     public Usuarios getUsuarios() {
         return usuarios;
@@ -66,6 +76,14 @@ public class UsuariosPaisesBean implements Serializable{
         return usuarioPais;
     }
 
+    public List<UsuariosPaises> getUsuariosPaisesEliminados() {
+        return usuariosPaisesEliminados;
+    }
+
+    public void setUsuariosPaisesEliminados(List<UsuariosPaises> usuariosPaisesEliminados) {
+        this.usuariosPaisesEliminados = usuariosPaisesEliminados;
+    }
+    
     public void setUsuarioPais(UsuariosPaises usuarioPais) {
         this.usuarioPais = usuarioPais;
     }
@@ -112,23 +130,44 @@ public class UsuariosPaisesBean implements Serializable{
     public void agregarPais(){
         Log("Agregar Pais a la lista usuariospaises");
         this.usuariosPaises.add(usuarioPais);
+        Usuarios usuario=usuarioPais.getUsuarios();
         usuarioPais=new UsuariosPaises();
-        usuarioPais.setUsuarios(new Usuarios());
+        usuarioPais.setUsuarios(usuario);
     }
-    public void insertar(Usuarios usuario){
-        Log("METODO INSERTAR USUARIOPAIS");
-        UsuariosPaisesDao usuariosPaisesDao=new UsuariosPaisesDaoImpl();
+    public void editar(){
+        Log("METODO editar USUARIOPAIS");
+        UsuariosPaisesDao usuariosPaisesDao=new UsuariosPaisesDaoImpl(session);
+        UsuariosDao usuariosDao=new UsuariosDaoImpl(session);
         Date tiempo=new Date();
-        for (int i = 0; i < usuariosPaises.size(); i++) {
-            UsuariosPaises usuariosPaises = this.usuariosPaises.get(i);
-            usuariosPaises.setUsuarios(usuario);
-            usuariosPaises.setEstado(Boolean.TRUE);
-            usuariosPaises.setTiempoEstado(tiempo);
-            Log(usuariosPaises.toString());
-            usuariosPaisesDao.registrar(usuariosPaises);
-        }
+        this.usuarioPais.setEstado(Boolean.TRUE);
+        this.usuarioPais.setTiempoEstado(tiempo);
+        this.usuarioPais.getUsuarios().setEstado(Boolean.TRUE);
+        this.usuarioPais.getUsuarios().setTiempoEstado(tiempo);
+        Log(this.usuarioPais.getUsuarios().toString());
+        usuariosDao.actualizar(this.usuarioPais.getUsuarios());
+        if(usuariosPaises.size()!=0)
+            for (int i = 0; i < usuariosPaises.size(); i++) {
+                UsuariosPaises usuarioPais = usuariosPaises.get(i);
+                usuarioPais.setUsuarios(this.usuarioPais.getUsuarios());
+                usuarioPais.setEstado(Boolean.TRUE);
+                usuarioPais.setTiempoEstado(tiempo);
+                if(usuarioPais.getId()!=null){
+                    usuariosPaisesDao.actualizar(usuarioPais);
+                }else{
+                    usuariosPaisesDao.registrar(usuarioPais);
+                }
+            }
+        if(usuariosPaisesEliminados.size()!=0)
+            for (int i = 0; i < usuariosPaisesEliminados.size(); i++) {
+                UsuariosPaises usuarioPais = usuariosPaisesEliminados.get(i);
+                usuarioPais.setUsuarios(this.usuarioPais.getUsuarios());
+                usuarioPais.setEstado(Boolean.FALSE);
+                usuarioPais.setTiempoEstado(tiempo);
+                usuariosPaisesDao.actualizar(usuarioPais);
+            }
+        inicializar();
         FacesContext context = FacesContext.getCurrentInstance(); 
-        context.addMessage("grwForMensajeConfirmacion",new FacesMessage("REGISTRO DE USUARIO PAISES","Fue Registrado Exitosamente...!"));        
+        context.addMessage("grwForMensajeConfirmacion",new FacesMessage("ACTUALIZACION DEL USUARIO","Fue Actualizado Exitosamente...!"));        
     }
     public void insertar(){
         Log("METODO INSERTAR USUARIOPAIS");
@@ -140,17 +179,17 @@ public class UsuariosPaisesBean implements Serializable{
         this.usuarioPais.getUsuarios().setEstado(Boolean.TRUE);
         this.usuarioPais.getUsuarios().setTiempoEstado(tiempo);
         usuariosDao.registrar(this.usuarioPais.getUsuarios());
-        Usuarios usuarios=usuariosDao.buscarPorReferenciaIdentificacionTipoDocumento(this.usuarioPais.getUsuarios().getReferenciaIdentificacion());
+        Usuarios usuarios=usuariosDao.buscarUsuarioPorReferenciaIdentificacion(this.usuarioPais.getUsuarios().getReferenciaIdentificacion());
         if(usuariosPaises.size()!=0)
-        for (int i = 0; i < usuariosPaises.size(); i++) {
-            UsuariosPaises usuarioPais = usuariosPaises.get(i);
-            usuarioPais.setUsuarios(usuarios);
-            usuarioPais.setEstado(Boolean.TRUE);
-            usuarioPais.setTiempoEstado(new Date());
-            usuariosPaisesDao.registrar(usuarioPais);
-            Log(usuarioPais.getPaises().toString());
-            System.out.println("AQUI");
-        }
+            for (int i = 0; i < usuariosPaises.size(); i++) {
+                UsuariosPaises usuarioPais = usuariosPaises.get(i);
+                usuarioPais.setUsuarios(usuarios);
+                usuarioPais.setEstado(Boolean.TRUE);
+                usuarioPais.setTiempoEstado(tiempo);
+                usuariosPaisesDao.registrar(usuarioPais);
+                Log(usuarioPais.getPaises().toString());
+                System.out.println("AQUI");
+            }
         inicializar();
         FacesContext context = FacesContext.getCurrentInstance(); 
         context.addMessage("grwForMensajeConfirmacion",new FacesMessage("REGISTRO DE USUARIO PAISES","Fue Registrado Exitosamente...!"));        
@@ -176,21 +215,61 @@ public class UsuariosPaisesBean implements Serializable{
         }
         return agrega;
     }
-    public void prueba(){
-        Log("ACCION EJECUTADA DESDE PAISES BEAN");
-        Log(""+idDocumentoIdentificacion);
-        Log(""+usuarioPais.getUsuarios().getReferenciaIdentificacion());
-        Log(""+usuarioPais.getUsuarios().getNombre());
-        Log(""+usuarioPais.getUsuarios().getApellido());
-        Log(""+usuarioPais.getUsuarios().getSexo());
-        Log(""+usuarioPais.getUsuarios().getMail());
-        Log(""+usuarioPais.getUsuarios().getFechaNacimiento());
-        for (int i = 0; i < this.usuariosPaises.size(); i++) {
-            UsuariosPaises up=this.usuariosPaises.get(i);
-            Log(up.getPaises().getNombre());
+    public void eliminarSeleccionPais(Integer id){
+        Log("ENTRO A ELIMINARSELECCIONPAIS");
+        for (int i = 0; i < usuariosPaises.size(); i++) {
+            UsuariosPaises usuarioPais = usuariosPaises.get(i);
+            if(usuarioPais.getPaises().getId()==id){
+                usuariosPaisesEliminados.add(usuariosPaises.get(i));
+                usuariosPaises.remove(i);
+                break;
+            }
         }
     }
-    public void Log(String msn){
+    public void prepararEliminacion(Integer id){
+        Log("METODO PREPARAR ACTUALIZACION DEL USUARIO");
+        UsuariosDao usuariosDao=new UsuariosDaoImpl(session);
+        UsuariosPaisesDaoImpl usuariosPaisesDao=new UsuariosPaisesDaoImpl(session);
+        usuarioPais.setUsuarios(usuariosDao.buscarPorId(id));
+        
+        Log(this.usuarioPais.getUsuarios().toString());
+        idDocumentoIdentificacion=""+usuarioPais.getUsuarios().getDocumentosIdentidad().getId();
+        String ids=""+usuarioPais.getUsuarios().getId();
+        usuariosPaises=usuariosPaisesDao.buscarPaisesPorIdUsuario(Integer.parseInt(ids));
+        Log(idDocumentoIdentificacion);
+    }
+    public void eliminar(){
+        UsuariosDao usuariosDao=new UsuariosDaoImpl(session);
+        UsuariosPaisesDaoImpl usuariosPaisesDao=new UsuariosPaisesDaoImpl(session);
+        Date tiempo=new Date();
+        usuarioPais.getUsuarios().setEstado(Boolean.FALSE);
+        usuarioPais.getUsuarios().setTiempoEstado(tiempo);
+        usuariosDao.actualizar(usuarioPais.getUsuarios());
+        for (int i = 0; i < usuariosPaises.size(); i++) {
+            UsuariosPaises usuarioPais = usuariosPaises.get(i);
+            usuarioPais.setUsuarios(this.usuarioPais.getUsuarios());
+            usuarioPais.setEstado(Boolean.FALSE);
+            usuarioPais.setTiempoEstado(tiempo);
+            usuariosPaisesDao.actualizar(usuarioPais);
+        }
+        inicializar();
+        FacesContext context = FacesContext.getCurrentInstance(); 
+        context.addMessage("grwForMensajeConfirmacion",new FacesMessage("ELIMINACION DE USUARIO","Fue Eliminado Exitosamente...!"));
+    }
+    
+    public void prepararActualizacion(Integer id){
+        Log("METODO PREPARAR ACTUALIZACION DEL USUARIO");
+        UsuariosDao usuariosDao=new UsuariosDaoImpl(session);
+        UsuariosPaisesDaoImpl usuariosPaisesDao=new UsuariosPaisesDaoImpl(session);
+        usuarioPais.setUsuarios(usuariosDao.buscarPorId(id));
+        
+        Log(this.usuarioPais.getUsuarios().toString());
+        idDocumentoIdentificacion=""+usuarioPais.getUsuarios().getDocumentosIdentidad().getId();
+        String ids=""+usuarioPais.getUsuarios().getId();
+        usuariosPaises=usuariosPaisesDao.buscarPaisesPorIdUsuario(Integer.parseInt(ids));
+        Log(idDocumentoIdentificacion);
+    }
+    private void Log(String msn){
         Logger.getLogger(getClass().getName()).log(Level.WARNING, "<<<<[[[["+msn.toUpperCase()+"]]]]>>>>");
     }
 }

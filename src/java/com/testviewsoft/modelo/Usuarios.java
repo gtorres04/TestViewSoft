@@ -132,6 +132,11 @@ public class Usuarios  implements java.io.Serializable {
         this.usuariosPaiseses = usuariosPaiseses;
     }
 
+    @Override
+    public String toString() {
+        return "Usuarios{" + "id=" + id + ", documentosIdentidad=" + documentosIdentidad.toString() + ", referenciaIdentificacion=" + referenciaIdentificacion + ", nombre=" + nombre + ", apellido=" + apellido + ", fechaNacimiento=" + fechaNacimiento + ", sexo=" + sexo + ", mail=" + mail + ", nacionalidad=" + nacionalidad + ", estado=" + estado + ", tiempoEstado=" + tiempoEstado + '}';
+    }
+    
 
 
 

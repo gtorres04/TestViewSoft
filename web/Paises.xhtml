@@ -14,27 +14,24 @@
         </h:form>
         <!--MENSAJE DE CONFIRMACION-->
         <p:growl life="3000" for="grwForMensajeConfirmacion" id="grwIdMensajeConfirmacion" showDetail="true"/>
-        <!--FORMULARIO DE NUEVO DOCUMENTO DE IDENTIDAD-->
+        <!--FORMULARIO DE NUEVO PAIS-->
         <h:form id="frmIdNuevoPais">
             <p:dialog header="Registrar Pais" widgetVar="dlgWgvNuevoPais" resizable="false" id="dlgIdNuevoPais" modal="true">  
-                     
                 <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">        
                     <h:outputText value="Nombre:" /> 
-                    <p:inputText value="#{paisesBean.pais.nombre}" style="width:200px"/>  
+                    <p:inputText required="true" value="#{paisesBean.pais.nombre}" style="width:200px"/>  
                 </h:panelGrid>  
                 <p:separator/>
-                <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaPaises" action="#{paisesBean.insertar()}" oncomplete="dlgWgvNuevoPais.hide()" image="icon-save" title="Guardar"/>
+                <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaPaises frmIdNuevoPais" action="#{paisesBean.insertar()}" oncomplete="handleLoginRequest(xhr, status, args,1)" image="icon-save" title="Guardar"/>
                 <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaPaises" oncomplete="dlgWgvNuevoPais.hide()" image="icon-cancel" title="Cancel"/>
-                
             </p:dialog>
         </h:form>
         <br/>
-        <!--LISTADO DE LOS DOCUMENTOS DE IDENTIDAD-->
+        <!--LISTADO DE LOS PAIS-->
         <h:form id="frmIdlistaPaises">
             <p:dataTable var="pais" onExpandStart="#{paisesBean.paises}" value="#{paisesBean.paises}" emptyMessage="No Pais." paginator="true" rows="15"  
                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
                  rowsPerPageTemplate="5,10,15" paginatorPosition="bottom">  
-                
                 <p:column headerText="ID">  
                     <h:outputText value="#{pais.id}" />  
                 </p:column>  
@@ -46,36 +43,58 @@
                     <p:commandButton oncomplete="dlgWgvEditarPais.show()" update=":frmIdEditarPais:dlgIdEditarPais" action="#{paisesBean.prepararActualizacion(pais.id)}" image="icon-edit" title="Editar"/>
                     <p:commandButton oncomplete="confDlgWgvConfirmarEliminar.show()" update=":frmIdCofirmarEliminar" action="#{paisesBean.prepararEliminacion(pais.id)}" image="icon-delete" title="Eliminar"/>    
                 </p:column>
-                
             </p:dataTable>
         </h:form>
-        <!--FORMULARIO MODIFICAR DOCUMENTO DE IDENTIDAD-->
+        <!--FORMULARIO MODIFICAR PAIS-->
         <h:form id="frmIdEditarPais">
             <p:dialog header="Actualizar Pais" widgetVar="dlgWgvEditarPais" resizable="false" id="dlgIdEditarPais" modal="true">  
                 <h:inputHidden value="#{paisesBean.pais.id}"/>
                 <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
                     <h:outputText value="Nombre:" /> 
-                    <p:inputText value="#{paisesBean.pais.nombre}" style="width:200px"/>  
+                    <p:inputText required="true" value="#{paisesBean.pais.nombre}" style="width:200px"/>  
                 </h:panelGrid>  
                 <p:separator/>
-                <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaPaises" action="#{paisesBean.actualizar()}" oncomplete="dlgWgvEditarPais.hide()" image="icon-save" title="Guardar"/>
+                <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaPaises frmIdEditarPais" action="#{paisesBean.actualizar()}" oncomplete="handleLoginRequest(xhr, status, args,2)" image="icon-save" title="Guardar"/>
                 <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaPaises" oncomplete="dlgWgvEditarPais.hide()" image="icon-cancel" title="Cancel"/>
-                
             </p:dialog>
         </h:form>
         <!-- vista Confirmar Eliminacion-->
         <h:form id="frmIdCofirmarEliminar">
-            
-            <p:confirmDialog header="Eliminar Pais" severity="alert"
-            widgetVar="confDlgWgvConfirmarEliminar">
+            <p:confirmDialog header="Eliminar Pais" severity="alert" widgetVar="confDlgWgvConfirmarEliminar">
                 <h:inputHidden value="#{paisesBean.pais.id}"/>
                 <h:inputHidden value="#{paisesBean.pais.nombre}"/>
                 <f:facet name="message">
                     <h:outputText value="Confirme Eliminar el Pais [ #{paisesBean.pais.nombre} ]"/>
                 </f:facet>
-                <p:commandButton value="Aceptar" action="#{paisesBean.eliminar(paisesBean.pais.id)}" update=":frmIdlistaPaises" oncomplete="confDlgWgvConfirmarEliminar.hide()"/>
+                <p:commandButton value="Aceptar" action="#{paisesBean.eliminar(paisesBean.pais.id)}" update=":frmIdlistaPaises :grwIdMensajeConfirmacion" oncomplete="confDlgWgvConfirmarEliminar.hide()"/>
                 <p:commandButton value="Cancelar" onclick="confDlgWgvConfirmarEliminar.hide();" type="button" />
             </p:confirmDialog>
         </h:form>
+        <script type="text/javascript">
+            function registrar(args){
+                if(args.validationFailed){
+                    dlgWgvNuevoPais.show();
+                }else{
+                    dlgWgvNuevoPais.hide();
+                }
+            }
+            function editar(args){
+                if(args.validationFailed){
+                    dlgWgvEditarPais.show();
+                }else{
+                    dlgWgvEditarPais.hide();
+                }
+            }
+            function handleLoginRequest(xhr, status, args,opcion) {
+                switch(opcion){
+                    case 1:
+                        registrar(args);
+                    break;
+                    case 2:
+                        editar(args);
+                    break;
+                }
+            }  
+        </script>
     </h:body>
 </html>

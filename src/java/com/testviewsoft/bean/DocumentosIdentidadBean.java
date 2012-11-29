@@ -5,9 +5,7 @@
 package com.testviewsoft.bean;
 
 import com.testviewsoft.dao.DocumentosIdentidadDao;
-import com.testviewsoft.dao.PaisesDao;
 import com.testviewsoft.dao.impl.DocumentosIdentidadDaoImpl;
-import com.testviewsoft.dao.impl.PaisesDaoImpl;
 import com.testviewsoft.modelo.DocumentosIdentidad;
 import java.util.ArrayList;
 import java.util.Date;
@@ -94,6 +92,8 @@ public class DocumentosIdentidadBean {
         documentoIdentidad.setTiempoEstado(tiempo);
         Log(documentoIdentidad.toString());
         documentosIdentidadDao.actualizar(documentoIdentidad);
+        FacesContext context = FacesContext.getCurrentInstance(); 
+        context.addMessage("grwForMensajeConfirmacion",new FacesMessage("ELIMINACION DE DOCUMENTO DE IDENTIDAD","Fue Eliminado Exitosamente...!"));
     }
     
     public void prepararEliminacion(Integer id){

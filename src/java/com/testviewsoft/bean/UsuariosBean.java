@@ -105,6 +105,7 @@ public class UsuariosBean {
         UsuariosDao usuariosDao=new UsuariosDaoImpl();
         usuario=usuariosDao.buscarPorId(id);
         idDocumentoIdentificacion=""+usuario.getDocumentosIdentidad().getId();
+        Log(idDocumentoIdentificacion);
     }
     
     public void eliminar(Integer id){

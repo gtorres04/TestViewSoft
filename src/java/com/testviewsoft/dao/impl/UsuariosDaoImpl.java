@@ -16,6 +16,18 @@ import org.hibernate.Session;
  */
 public class UsuariosDaoImpl implements UsuariosDao{
     Session session=HibernateUtil.getSessionFactory().openSession();
+
+    public UsuariosDaoImpl(Session session) {
+        this.session = session;
+    }
+
+    public UsuariosDaoImpl() {
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+    
     public void registrar(Usuarios usuario) {
         try {
             session.beginTransaction();
@@ -54,7 +66,7 @@ public class UsuariosDaoImpl implements UsuariosDao{
     public Usuarios buscarPorId(Integer id) {
         return (Usuarios) session.createQuery("FROM Usuarios usuario WHERE usuario.id="+id+" AND usuario.estado="+Boolean.TRUE).iterate().next();
     }
-    public Usuarios buscarPorReferenciaIdentificacionTipoDocumento(String referenciaIdentificacion) {
+    public Usuarios buscarUsuarioPorReferenciaIdentificacion(String referenciaIdentificacion) {
         return (Usuarios) session.createQuery("FROM Usuarios usuario WHERE usuario.referenciaIdentificacion="+referenciaIdentificacion+" AND usuario.estado="+Boolean.TRUE).iterate().next();
     }
 

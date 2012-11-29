@@ -18,5 +18,5 @@ public interface UsuariosDao {
     public void eliminar(Usuarios usuario);
     public Usuarios buscarPorId(Integer id);
     public List<Usuarios> buscarTodos();
-    public Usuarios buscarPorReferenciaIdentificacionTipoDocumento(String referenciaIdentificacion);
+    public Usuarios buscarUsuarioPorReferenciaIdentificacion(String referenciaIdentificacion);
 }

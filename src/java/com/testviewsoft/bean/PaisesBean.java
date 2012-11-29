@@ -5,10 +5,7 @@
 package com.testviewsoft.bean;
 
 import com.testviewsoft.dao.PaisesDao;
-import com.testviewsoft.dao.PaisesDao;
-import com.testviewsoft.dao.impl.DocumentosIdentidadDaoImpl;
 import com.testviewsoft.dao.impl.PaisesDaoImpl;
-import com.testviewsoft.modelo.Paises;
 import com.testviewsoft.modelo.Paises;
 import java.util.Date;
 import java.util.List;
@@ -18,13 +15,12 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 
 /**
  *
  * @author GerlinOTS
  */
-@ManagedBean(name="paisesBean")
+@ManagedBean
 @RequestScoped
 public class PaisesBean {
     private Paises pais;
