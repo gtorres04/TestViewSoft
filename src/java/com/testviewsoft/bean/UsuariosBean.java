@@ -50,7 +50,7 @@ public class UsuariosBean {
 
     public List<Usuarios> getUsuarios() {
         UsuariosDao usuariosDao=new UsuariosDaoImpl();
-        usuarios=usuariosDao.buscarTodos();
+        usuarios=usuariosDao.buscarTodosEstadoTRUE();
         return usuarios;
     }
 

@@ -5,8 +5,13 @@
 package com.testviewsoft.bean;
 
 import com.testviewsoft.dao.PaisesDao;
+import com.testviewsoft.dao.UsuariosPaisesDao;
 import com.testviewsoft.dao.impl.PaisesDaoImpl;
+import com.testviewsoft.dao.impl.UsuariosPaisesDaoImpl;
+import com.testviewsoft.dao.util.HibernateUtil;
 import com.testviewsoft.modelo.Paises;
+import com.testviewsoft.modelo.UsuariosPaises;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -83,11 +88,16 @@ public class PaisesBean {
         Date tiempo=new Date();
         PaisesDao paisesDao=new PaisesDaoImpl();
         pais=paisesDao.buscarPorId(id);
-        pais.setEstado(Boolean.FALSE);
-        pais.setTiempoEstado(tiempo);
-        paisesDao.actualizar(pais);
+        List<UsuariosPaises> listaUsuariosPaisesRelacionadosPais=listaUsuariosPaisesEstadoTRUERelacionadosConPaises(pais);
         FacesContext context = FacesContext.getCurrentInstance(); 
-        context.addMessage("grwForMensajeConfirmacion",new FacesMessage("ELIMINACION DE PAIS","Fue Actualizado Exitosamente...!"));
+        if(listaUsuariosPaisesRelacionadosPais.size()==0){
+            pais.setEstado(Boolean.FALSE);
+            pais.setTiempoEstado(tiempo);
+            paisesDao.actualizar(pais);
+            context.addMessage("grwForMensajeConfirmacion",new FacesMessage("ELIMINACION DE PAIS","Fue Actualizado Exitosamente...!"));
+        }else{
+            context.addMessage("grwForMensajeConfirmacion",new FacesMessage(FacesMessage.SEVERITY_ERROR, "IMPOSIBLE ELIMINAR","Este Pais Esta relacionado con "+listaUsuariosPaisesRelacionadosPais.size()+" Registros de Usuarios"));
+        }
     }
     
     public void prepararEliminacion(Integer id){
@@ -96,6 +106,21 @@ public class PaisesBean {
         pais=paisesDao.buscarPorId(id);
     }
     
+    public List<UsuariosPaises> listaUsuariosPaisesEstadoTRUERelacionadosConPaises(Paises paises){
+        List<UsuariosPaises> listaUsuariosPaisesRelacionadosConPaises=new ArrayList<UsuariosPaises>();
+        UsuariosPaisesDao usuariosDao=new UsuariosPaisesDaoImpl();
+        List<UsuariosPaises> listaUsuariosPaises;
+        listaUsuariosPaises = usuariosDao.buscarTodosEstadoTRUE();
+        for (int i = 0; i < listaUsuariosPaises.size(); i++) {
+            UsuariosPaises usuariosPaises = listaUsuariosPaises.get(i);
+            Log(""+usuariosPaises.getPaises().getId()+"=="+paises.getId());
+            Log(""+(usuariosPaises.getPaises().getId().equals(paises.getId())));
+            if(usuariosPaises.getPaises().getId().equals(paises.getId())){
+                listaUsuariosPaisesRelacionadosConPaises.add(usuariosPaises);
+            }
+        }
+        return listaUsuariosPaisesRelacionadosConPaises;
+    }
     
     public void Log(String msn){
         Logger.getLogger(getClass().getName()).log(Level.WARNING, "<<<<[[[["+msn.toUpperCase()+"]]]]>>>>");

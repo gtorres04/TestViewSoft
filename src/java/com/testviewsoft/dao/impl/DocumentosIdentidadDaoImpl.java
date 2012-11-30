@@ -53,7 +53,7 @@ public class DocumentosIdentidadDaoImpl implements DocumentosIdentidadDao{
         return (DocumentosIdentidad) session.createQuery("FROM DocumentosIdentidad documentoIdentidad WHERE documentoIdentidad.id="+id+" AND documentoIdentidad.estado="+Boolean.TRUE).iterate().next();
     }
 
-    public List<DocumentosIdentidad> buscarTodos() {
+    public List<DocumentosIdentidad> buscarTodosEstadoTRUE() {
         return session.createQuery("FROM DocumentosIdentidad documentoIdentidad WHERE documentoIdentidad.estado="+Boolean.TRUE).list();
     }
     

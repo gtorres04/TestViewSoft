@@ -65,7 +65,7 @@ public class UsuariosPaisesDaoImpl implements UsuariosPaisesDao{
         return (UsuariosPaises) session.createQuery("FROM UsuariosPaises usuarioPais WHERE usuarioPais.id="+id+" AND usuarioPais.estado="+Boolean.TRUE).iterate().next();
     }
 
-    public List<UsuariosPaises> buscarTodos() {
+    public List<UsuariosPaises> buscarTodosEstadoTRUE() {
         return session.createQuery("FROM UsuariosPaises usuarioPais WHERE usuarioPais.estado="+Boolean.TRUE).list();
     }
     public List<UsuariosPaises> buscarPaisesPorIdUsuario(Integer id){

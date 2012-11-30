@@ -16,5 +16,5 @@ public interface UsuariosPaisesDao {
     public void actualizar(UsuariosPaises usuariosPaises);
     public void eliminar(UsuariosPaises usuariosPaises);
     public UsuariosPaises buscarPorId(Integer id);
-    public List<UsuariosPaises> buscarTodos();
+    public List<UsuariosPaises> buscarTodosEstadoTRUE();
 }

@@ -69,8 +69,10 @@ public class UsuariosDaoImpl implements UsuariosDao{
     public Usuarios buscarUsuarioPorReferenciaIdentificacion(String referenciaIdentificacion) {
         return (Usuarios) session.createQuery("FROM Usuarios usuario WHERE usuario.referenciaIdentificacion="+referenciaIdentificacion+" AND usuario.estado="+Boolean.TRUE).iterate().next();
     }
-
-    public List<Usuarios> buscarTodos() {
+    public List<Usuarios> buscarTodos(){
+        return session.createQuery("FROM Usuarios usuario").list();
+    }
+    public List<Usuarios> buscarTodosEstadoTRUE() {
         return session.createQuery("FROM Usuarios usuario WHERE usuario.estado="+Boolean.TRUE).list();
     }
     

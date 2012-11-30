@@ -7,13 +7,10 @@ package com.testviewsoft.dao.impl;
 import com.testviewsoft.dao.PaisesDao;
 import com.testviewsoft.dao.util.HibernateUtil;
 import com.testviewsoft.modelo.Paises;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.Session;
-import org.hibernate.context.CurrentSessionContext;
-import org.jboss.weld.context.SessionContext;
 
 /**
  *

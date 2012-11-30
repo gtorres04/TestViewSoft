@@ -17,5 +17,5 @@ public interface DocumentosIdentidadDao {
     public void actualizar(DocumentosIdentidad documentoIdentidad);
     public void eliminar(DocumentosIdentidad documentoIdentidad);
     public DocumentosIdentidad buscarPorId(Integer id);
-    public List<DocumentosIdentidad> buscarTodos();
+    public List<DocumentosIdentidad> buscarTodosEstadoTRUE();
 }

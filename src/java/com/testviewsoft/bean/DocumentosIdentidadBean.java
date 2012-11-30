@@ -5,8 +5,11 @@
 package com.testviewsoft.bean;
 
 import com.testviewsoft.dao.DocumentosIdentidadDao;
+import com.testviewsoft.dao.UsuariosDao;
 import com.testviewsoft.dao.impl.DocumentosIdentidadDaoImpl;
+import com.testviewsoft.dao.impl.UsuariosDaoImpl;
 import com.testviewsoft.modelo.DocumentosIdentidad;
+import com.testviewsoft.modelo.Usuarios;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,12 +48,12 @@ public class DocumentosIdentidadBean {
     }
     public void cargarListaDocumentosIdentidad(){
         DocumentosIdentidadDao documentosIdentidadDao=new DocumentosIdentidadDaoImpl();
-        this.documentosIdentidad=documentosIdentidadDao.buscarTodos();
+        this.documentosIdentidad=documentosIdentidadDao.buscarTodosEstadoTRUE();
         
     }
     public List<DocumentosIdentidad> getDocumentosIdentidad() {
         DocumentosIdentidadDao documentosIdentidadDao=new DocumentosIdentidadDaoImpl();
-        this.documentosIdentidad=documentosIdentidadDao.buscarTodos();
+        this.documentosIdentidad=documentosIdentidadDao.buscarTodosEstadoTRUE();
         return documentosIdentidad;
     }
     
@@ -85,15 +88,20 @@ public class DocumentosIdentidadBean {
     
     public void eliminar(Integer id){
         Log("METODO ELIMINAR DOCUMENTO IDENTIDAD");
+        FacesContext context = FacesContext.getCurrentInstance(); 
         DocumentosIdentidadDao documentosIdentidadDao=new DocumentosIdentidadDaoImpl();
         Date tiempo=new Date();
         documentoIdentidad=documentosIdentidadDao.buscarPorId(id);
-        documentoIdentidad.setEstado(Boolean.FALSE);
-        documentoIdentidad.setTiempoEstado(tiempo);
-        Log(documentoIdentidad.toString());
-        documentosIdentidadDao.actualizar(documentoIdentidad);
-        FacesContext context = FacesContext.getCurrentInstance(); 
-        context.addMessage("grwForMensajeConfirmacion",new FacesMessage("ELIMINACION DE DOCUMENTO DE IDENTIDAD","Fue Eliminado Exitosamente...!"));
+        List<Usuarios> listaUsuariosRelacionadosDocumentoIdentidad=listaUsuariosEstadoTRUERelacionadosConDocumentoIdentidad(documentoIdentidad);
+        if(listaUsuariosRelacionadosDocumentoIdentidad.size()==0){
+            documentoIdentidad.setEstado(Boolean.FALSE);
+            documentoIdentidad.setTiempoEstado(tiempo);
+            Log(documentoIdentidad.toString());
+            documentosIdentidadDao.actualizar(documentoIdentidad);
+            context.addMessage("grwForMensajeConfirmacion",new FacesMessage("ELIMINACION DE DOCUMENTO DE IDENTIDAD","Fue Eliminado Exitosamente...!"));
+        }else{
+            context.addMessage("grwForMensajeConfirmacion",new FacesMessage(FacesMessage.SEVERITY_ERROR, "IMPOSIBLE","Esta Documento Esta relacionado con "+listaUsuariosRelacionadosDocumentoIdentidad.size()+" Registros de Usuarios"));
+        }
     }
     
     public void prepararEliminacion(Integer id){
@@ -105,10 +113,25 @@ public class DocumentosIdentidadBean {
         Log("METODO listaItemsDOCUMENTOSIDENTIDAD() DEL DOCUMENTOSIDENTIDADBean");
         DocumentosIdentidadDao documentosIdentidadDao=new DocumentosIdentidadDaoImpl();;
         List<SelectItem> lista=new ArrayList<SelectItem>();
-        for (int i = 0; i < documentosIdentidadDao.buscarTodos().size(); i++) {
-                lista.add(new SelectItem(""+documentosIdentidadDao.buscarTodos().get(i).getId(), documentosIdentidadDao.buscarTodos().get(i).getNombre()));
+        for (int i = 0; i < documentosIdentidadDao.buscarTodosEstadoTRUE().size(); i++) {
+                lista.add(new SelectItem(""+documentosIdentidadDao.buscarTodosEstadoTRUE().get(i).getId(), documentosIdentidadDao.buscarTodosEstadoTRUE().get(i).getNombre()));
         }
         return lista;
+    }
+    public List<Usuarios> listaUsuariosEstadoTRUERelacionadosConDocumentoIdentidad(DocumentosIdentidad documentoIdentidad){
+        List<Usuarios> listaUsuariosRelacionadosConDocumentoIdentidad=new ArrayList<Usuarios>();
+        UsuariosDao usuariosDao=new UsuariosDaoImpl();
+        List<Usuarios> listaUsuarios;
+        listaUsuarios = usuariosDao.buscarTodosEstadoTRUE();
+        for (int i = 0; i < listaUsuarios.size(); i++) {
+            Usuarios usuarios = listaUsuarios.get(i);
+            Log(""+usuarios.getDocumentosIdentidad().getId()+"=="+documentoIdentidad.getId());
+            Log(""+(usuarios.getDocumentosIdentidad().getId().equals(documentoIdentidad.getId())));
+            if(usuarios.getDocumentosIdentidad().getId().equals(documentoIdentidad.getId())){
+                listaUsuariosRelacionadosConDocumentoIdentidad.add(usuarios);
+            }
+        }
+        return listaUsuariosRelacionadosConDocumentoIdentidad;
     }
     public void Log(String msn){
         Logger.getLogger(getClass().getName()).log(Level.WARNING, "<<<<[[[["+msn.toUpperCase()+"]]]]>>>>");
