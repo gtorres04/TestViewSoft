@@ -9,9 +9,9 @@
         <h:head>
             <f:facet name="first">
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-                <link rel="stylesheet" href="resource/css/estilos.css"/>
                 <title>Documentos de Identidad</title>
             </f:facet>
+            <h:outputStylesheet library="css" name="estilos.css" />
         </h:head>
 
         <h:body>
@@ -36,7 +36,7 @@
 
                 <p:layoutUnit position="center">
                     <h:form id="idFrmBtnNuevoUsuario" style="text-align: center">
-                        <p:commandButton value="Nuevo Usuario" image="icon-add" oncomplete="dlgWgvNuevoUsuario.show()" update=":frmIdNuevoUsuario"/>
+                        <p:commandButton value="Nuevo Usuario" icon="iconadd" oncomplete="dlgWgvNuevoUsuario.show()" update=":frmIdNuevoUsuario"/>
                     </h:form>
                     <br/>
                     <!--MENSAJE DE CONFIRMACION-->
@@ -50,7 +50,7 @@
                             <p:column headerText="Identificación">  
                                 <h:outputText value="#{usuario.referenciaIdentificacion}" />  
                             </p:column>  
-                            <p:column headerText="Nombre">  
+                            <p:column headerText="Nombre" filterBy="#{usuario.nombre}">  
                                 <h:outputText value="#{usuario.nombre}" />  
                             </p:column>  
                             <p:column headerText="Apellido">  
@@ -66,8 +66,8 @@
                                 <h:outputText value="#{usuario.mail}" />  
                             </p:column>
                             <p:column style="width:12%; text-align: center" headerText="Opciones">  
-                                <p:commandButton oncomplete="dlgWgvEditarUsuario.show()" update=":frmIdEditarUsuario:dlgIdEditarUsuario" action="#{usuariosPaisesBean.prepararActualizacion(usuario.id)}" image="icon-edit" title="Editar"/>
-                                <p:commandButton oncomplete="confDlgWgvConfirmarEliminar.show()" update=":frmIdConfirmarEliminar" action="#{usuariosPaisesBean.prepararEliminacion(usuario.id)}" image="icon-delete" title="Eliminar"/>    
+                                <p:commandButton oncomplete="dlgWgvEditarUsuario.show()" update=":frmIdEditarUsuario:dlgIdEditarUsuario" action="#{usuariosPaisesBean.prepararActualizacion(usuario.id)}" icon="iconedit" title="Editar"/>
+                                <p:commandButton oncomplete="confDlgWgvConfirmarEliminar.show()" update=":frmIdConfirmarEliminar" action="#{usuariosPaisesBean.prepararEliminacion(usuario.id)}" icon="icondelete" title="Eliminar"/>    
                             </p:column>
 
                         </p:dataTable>
@@ -113,14 +113,14 @@
                                 <h:outputText  value="#{usuarioPais.paises.nombre}"/>
                             </p:column>
                             <p:column style="width:12%; text-align: center" headerText="Eliminar">  
-                                <p:commandButton process="@this" image="icon-delete" title="Eliminar" update=":frmIdNuevoUsuario:slct1MnIdNuevoUsuarioListaPaises dttbListaSeleccionPaises" action="#{usuariosPaisesBean.eliminarSeleccionPais(usuarioPais.paises.id)}"/>    
+                                <p:commandButton process="@this" icon="icondelete" title="Eliminar" update=":frmIdNuevoUsuario:slct1MnIdNuevoUsuarioListaPaises dttbListaSeleccionPaises" action="#{usuariosPaisesBean.eliminarSeleccionPais(usuarioPais.paises.id)}"/>    
                             </p:column>
                         </p:dataTable>
 
                     </h:panelGrid>
                     <p:separator/>
-                    <p:commandButton value="&nbsp;Guardar" update="frmIdNuevoUsuario :frmIdlistaUsuarios :grwIdMensajeConfirmacion" process="@this inpTxtIdMail cldrIdFechaNacimiento slct1MnIdSexo inpTxtIdApellido inpTxtIdNombre inpTxtIdReferenciaIdentificacion slct1MnIdListaDocumentosIdentidad" action="#{usuariosPaisesBean.insertar()}" oncomplete="handleLoginRequest(xhr, status, args,1)" image="icon-save" title="Guardar"/>
-                    <p:commandButton value="&nbsp;Cancelar" oncomplete="dlgWgvNuevoUsuario.hide()" update="frmIdNuevoUsuario" process="@this" image="icon-cancel" title="Cancel" action="#{usuariosPaisesBean.cancelar()}"/>
+                    <p:commandButton value="&nbsp;Guardar" update="frmIdNuevoUsuario :frmIdlistaUsuarios :grwIdMensajeConfirmacion" process="@this inpTxtIdMail cldrIdFechaNacimiento slct1MnIdSexo inpTxtIdApellido inpTxtIdNombre inpTxtIdReferenciaIdentificacion slct1MnIdListaDocumentosIdentidad" action="#{usuariosPaisesBean.insertar()}" oncomplete="handleLoginRequest(xhr, status, args,1)" icon="iconsave" title="Guardar"/>
+                    <p:commandButton value="&nbsp;Cancelar" oncomplete="dlgWgvNuevoUsuario.hide()" update="frmIdNuevoUsuario" process="@this" icon="iconcancel" title="Cancel" action="#{usuariosPaisesBean.cancelar()}"/>
                 </p:dialog>
             </h:form>
             <!--FORMULARIO MODIFICAR DOCUMENTO DE IDENTIDAD-->
@@ -161,14 +161,14 @@
                                 <h:outputText  value="#{usuarioPais.paises.nombre}"/>
                             </p:column>
                             <p:column style="width:12%; text-align: center" headerText="Eliminar">  
-                                <p:commandButton process="@this" image="icon-delete" title="Eliminar" update=":frmIdEditarUsuario:slct1MnIdNuevoUsuarioListaPaises dttbListaSeleccionPaises" action="#{usuariosPaisesBean.eliminarSeleccionPais(usuarioPais.paises.id)}"/>    
+                                <p:commandButton process="@this" icon="icondelete" title="Eliminar" update=":frmIdEditarUsuario:slct1MnIdNuevoUsuarioListaPaises dttbListaSeleccionPaises" action="#{usuariosPaisesBean.eliminarSeleccionPais(usuarioPais.paises.id)}"/>    
                             </p:column>
                         </p:dataTable>
 
                     </h:panelGrid>
                     <p:separator/>
-                    <p:commandButton partialSubmit="" value="&nbsp;Guardar" update="frmIdEditarUsuario :frmIdlistaUsuarios :grwIdMensajeConfirmacion" process="@this inpTxtIdMail cldrIdFechaNacimiento slct1MnIdSexo inpTxtIdApellido inpTxtIdNombre inpTxtIdReferenciaIdentificacion slct1MnIdListaDocumentosIdentidad" action="#{usuariosPaisesBean.editar()}" oncomplete="handleLoginRequest(xhr, status, args,2)" image="icon-save" title="Guardar"/>
-                    <p:commandButton value="&nbsp;Cancelar" oncomplete="dlgWgvEditarUsuario.hide()" update="frmIdEditarUsuario" process="@this" image="icon-cancel" title="Cancel" action="#{usuariosPaisesBean.cancelar()}"/>
+                    <p:commandButton value="&nbsp;Guardar" update="frmIdEditarUsuario :frmIdlistaUsuarios :grwIdMensajeConfirmacion" process="@this inpTxtIdMail cldrIdFechaNacimiento slct1MnIdSexo inpTxtIdApellido inpTxtIdNombre inpTxtIdReferenciaIdentificacion slct1MnIdListaDocumentosIdentidad" action="#{usuariosPaisesBean.editar()}" oncomplete="handleLoginRequest(xhr, status, args,2)" icon="iconsave" title="Guardar"/>
+                    <p:commandButton value="&nbsp;Cancelar" oncomplete="dlgWgvEditarUsuario.hide()" update="frmIdEditarUsuario" process="@this" icon="iconcancel" title="Cancel" action="#{usuariosPaisesBean.cancelar()}"/>
                 </p:dialog>
             </h:form>
             <!-- vista Confirmar Eliminacion-->
@@ -181,8 +181,8 @@
                     <f:facet name="message">
                         <h:outputText value="Confirme Eliminar el Usuario [ #{usuariosPaisesBean.usuarioPais.usuarios.nombre} ]"/>
                     </f:facet>
-                    <p:commandButton value="Aceptar" action="#{usuariosPaisesBean.eliminar()}" update=":frmIdlistaUsuarios :grwIdMensajeConfirmacion" oncomplete="confDlgWgvConfirmarEliminar.hide()"/>
-                    <p:commandButton value="Cancelar" oncomplete="confDlgWgvConfirmarEliminar.hide();" action="#{usuariosPaisesBean.cancelar()}" type="button" />
+                    <p:commandButton value="Aceptar" action="#{usuariosPaisesBean.eliminar()}" update=":frmIdlistaUsuarios :grwIdMensajeConfirmacion" oncomplete="confDlgWgvConfirmarEliminar.hide()" icon="iconaccept"/>
+                    <p:commandButton value="Cancelar" oncomplete="confDlgWgvConfirmarEliminar.hide();" action="#{usuariosPaisesBean.cancelar()}" type="button" icon="iconcancel" />
                 </p:confirmDialog>
             </h:form>
             <script type="text/javascript">

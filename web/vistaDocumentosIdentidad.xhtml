@@ -9,9 +9,9 @@
         <h:head>
             <f:facet name="first">
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-                <link rel="stylesheet" href="resource/css/estilos.css"/>
                 <title>Documentos de Identidad</title>
             </f:facet>
+            <h:outputStylesheet library="css" name="estilos.css" />
         </h:head>
 
         <h:body>
@@ -35,7 +35,7 @@
                 </p:layoutUnit>
                 <p:layoutUnit position="center" id="lytUntCenterListaDocumentosIdentidad">
                     <h:form id="idFrmBtnNuevoUsuario" style="text-align: center">
-                        <p:commandButton value="Nuevo Documento de Identidad" image="icon-add" oncomplete="dlgWgvNuevoDocumentoIdentidad.show()" update=":frmIdNuevoDocumentoIdentidad"/>
+                        <p:commandButton value="Nuevo Documento de Identidad" icon="iconadd" oncomplete="dlgWgvNuevoDocumentoIdentidad.show()" update=":frmIdNuevoDocumentoIdentidad"/>
                     </h:form>
                     <br/>
                     <!--MENSAJE DE CONFIRMACION-->
@@ -54,8 +54,8 @@
                             </p:column>  
 
                             <p:column style="width:12%; text-align: center" headerText="Opciones">  
-                                <p:commandButton oncomplete="dlgWgvEditarDocumentoIdentidad.show()" update=":frmIdEditarDocumentoIdentidad:dlgIdEditarDocumentoIdentidad" action="#{documentosIdentidadBean.prepararActualizacion(documentoIdentidad.id)}" image="icon-edit" title="Editar"/>
-                                <p:commandButton oncomplete="confDlgWgvConfirmarEliminar.show()" update=":frmIdCofirmarEliminar" action="#{documentosIdentidadBean.prepararEliminacion(documentoIdentidad.id)}" image="icon-delete" title="Eliminar"/>    
+                                <p:commandButton oncomplete="dlgWgvEditarDocumentoIdentidad.show()" update=":frmIdEditarDocumentoIdentidad:dlgIdEditarDocumentoIdentidad" action="#{documentosIdentidadBean.prepararActualizacion(documentoIdentidad.id)}" icon="iconedit" title="Editar"/>
+                                <p:commandButton oncomplete="confDlgWgvConfirmarEliminar.show()" update=":frmIdCofirmarEliminar" action="#{documentosIdentidadBean.prepararEliminacion(documentoIdentidad.id)}" icon="icondelete" title="Eliminar"/>    
                             </p:column>
 
                         </p:dataTable>
@@ -70,8 +70,8 @@
                         <p:inputText required="true" id="inpTxtIdNombreDocumentoIdentidad" value="#{documentosIdentidadBean.documentoIdentidad.nombre}" style="width:200px"/>  
                     </h:panelGrid>  
                     <p:separator/>
-                    <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaDocumentosIdentidad frmIdNuevoDocumentoIdentidad" action="#{documentosIdentidadBean.insertar()}" oncomplete="handleLoginRequest(xhr, status, args,1)" image="icon-save" title="Guardar"/>
-                    <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaDocumentosIdentidad" oncomplete="dlgWgvNuevoDocumentoIdentidad.hide()" image="icon-cancel" title="Cancel"/>
+                    <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaDocumentosIdentidad frmIdNuevoDocumentoIdentidad" action="#{documentosIdentidadBean.insertar()}" oncomplete="handleLoginRequest(xhr, status, args,1)" icon="iconsave" title="Guardar"/>
+                    <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaDocumentosIdentidad" oncomplete="dlgWgvNuevoDocumentoIdentidad.hide()" icon="iconcancel" title="Cancel"/>
                 </p:dialog>
             </h:form>
             <!--FORMULARIO MODIFICAR DOCUMENTO DE IDENTIDAD-->
@@ -83,8 +83,8 @@
                         <p:inputText required="true" id="inpTxtIdNombreDocumentoIdentidadEditar" value="#{documentosIdentidadBean.documentoIdentidad.nombre}" style="width:200px"/>  
                     </h:panelGrid>  
                     <p:separator/>
-                    <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaDocumentosIdentidad frmIdEditarDocumentoIdentidad" action="#{documentosIdentidadBean.actualizar()}" oncomplete="handleLoginRequest(xhr, status, args,2)" image="icon-save" title="Guardar"/>
-                    <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaDocumentosIdentidad" oncomplete="dlgWgvEditarDocumentoIdentidad.hide()" image="icon-cancel" title="Cancel"/>
+                    <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaDocumentosIdentidad frmIdEditarDocumentoIdentidad" action="#{documentosIdentidadBean.actualizar()}" oncomplete="handleLoginRequest(xhr, status, args,2)" icon="iconsave" title="Guardar"/>
+                    <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaDocumentosIdentidad" oncomplete="dlgWgvEditarDocumentoIdentidad.hide()" icon="iconcancel" title="Cancel"/>
 
                 </p:dialog>
             </h:form>
@@ -96,8 +96,8 @@
                     <f:facet name="message">
                         <h:outputText value="Confirme Eliminar el Documento de Identidad [ #{documentosIdentidadBean.documentoIdentidad.nombre} ]"/>
                     </f:facet>
-                    <p:commandButton value="Aceptar" action="#{documentosIdentidadBean.eliminar(documentosIdentidadBean.documentoIdentidad.id)}" update=":frmIdlistaDocumentosIdentidad :grwIdMensajeConfirmacion" oncomplete="confDlgWgvConfirmarEliminar.hide()"/>
-                    <p:commandButton value="Cancelar" onclick="confDlgWgvConfirmarEliminar.hide();" type="button" />
+                    <p:commandButton value="Aceptar" action="#{documentosIdentidadBean.eliminar(documentosIdentidadBean.documentoIdentidad.id)}" update=":frmIdlistaDocumentosIdentidad :grwIdMensajeConfirmacion" oncomplete="confDlgWgvConfirmarEliminar.hide()" icon="iconaccept"/>
+                    <p:commandButton value="Cancelar" onclick="confDlgWgvConfirmarEliminar.hide();" type="button" icon="iconcancel"/>
                 </p:confirmDialog>
             </h:form>
             <script type="text/javascript">

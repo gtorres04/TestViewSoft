@@ -1,0 +1,21 @@
+.iconadd{
+    background: url("#{resource['img:add.png']}") !important;
+}
+
+.iconedit{
+    background: url("#{resource['img:edit.png']}") !important;
+}
+
+.icondelete{
+    background: url("#{resource['img:delete.png']}") !important;
+}
+
+.iconsave{
+    background: url("#{resource['img:save.png']}") !important;
+}
+.iconcancel{
+    background: url("#{resource['img:cancel.png']}") !important;
+}
+.iconaccept{
+    background: url("#{resource['img:accept.png']}") !important;
+}

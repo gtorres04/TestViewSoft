@@ -9,13 +9,13 @@
         <h:head>
             <f:facet name="first">
                 <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-                <link rel="stylesheet" href="resource/css/estilos.css"/>
                 <title>Documentos de Identidad</title>
             </f:facet>
+            <h:outputStylesheet library="css" name="estilos.css" />
         </h:head>
 
         <h:body>
-
+            
             <p:layout fullPage="true">
 
                 <p:layoutUnit position="north" size="100" resizable="true" closable="true" collapsible="true">
@@ -35,8 +35,11 @@
                 </p:layoutUnit>
 
                 <p:layoutUnit position="center">
+                    <button type="submit" value="guardar" name="Guardar" title="guadar"/>
                     <h:form id="idFrmBtnNuevoPais" style="text-align: center">
-                        <p:commandButton value="Nuevo Pais" image="icon-add" oncomplete="dlgWgvNuevoPais.show()" update=":frmIdNuevoPais"/>
+                        
+                        
+                        <p:commandButton value="Nuevo Pais" icon="iconadd" oncomplete="dlgWgvNuevoPais.show()" update=":frmIdNuevoPais"/>
                     </h:form>
                     <br/>
                     <!--MENSAJE DE CONFIRMACION-->
@@ -46,7 +49,7 @@
                         <p:dataTable var="pais" onExpandStart="#{paisesBean.paises}" value="#{paisesBean.paises}" emptyMessage="No Pais." paginator="true" rows="15"  
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
                              rowsPerPageTemplate="5,10,15" paginatorPosition="bottom">  
-                            <p:column headerText="ID">  
+                            <p:column headerText="ID" filterBy="#{pais.id}">  
                                 <h:outputText value="#{pais.id}" />  
                             </p:column>  
                             <p:column headerText="Nombre">  
@@ -54,8 +57,8 @@
                             </p:column>  
 
                             <p:column style="width:12%; text-align: center" headerText="Opciones">  
-                                <p:commandButton oncomplete="dlgWgvEditarPais.show()" update=":frmIdEditarPais:dlgIdEditarPais" action="#{paisesBean.prepararActualizacion(pais.id)}" image="icon-edit" title="Editar"/>
-                                <p:commandButton oncomplete="confDlgWgvConfirmarEliminar.show()" update=":frmIdCofirmarEliminar" action="#{paisesBean.prepararEliminacion(pais.id)}" image="icon-delete" title="Eliminar"/>    
+                                <p:commandButton oncomplete="dlgWgvEditarPais.show()" update=":frmIdEditarPais:dlgIdEditarPais" action="#{paisesBean.prepararActualizacion(pais.id)}" icon="iconedit" title="Editar"/>
+                                <p:commandButton oncomplete="confDlgWgvConfirmarEliminar.show()" update=":frmIdCofirmarEliminar" action="#{paisesBean.prepararEliminacion(pais.id)}" icon="icondelete" title="Eliminar"/>    
                             </p:column>
                         </p:dataTable>
                     </h:form>
@@ -67,11 +70,14 @@
                 <p:dialog header="Registrar Pais" widgetVar="dlgWgvNuevoPais" resizable="false" id="dlgIdNuevoPais" modal="true">  
                     <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">        
                         <h:outputText value="Nombre:" /> 
-                        <p:inputText required="true" value="#{paisesBean.pais.nombre}" style="width:200px"/>  
+                        <p:inputText required="true" value="#{paisesBean.pais.nombre}" style="width:200px">
+                           
+                        </p:inputText>
+ 
                     </h:panelGrid>  
                     <p:separator/>
-                    <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaPaises frmIdNuevoPais" action="#{paisesBean.insertar()}" oncomplete="handleLoginRequest(xhr, status, args,1)" image="icon-save" title="Guardar"/>
-                    <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaPaises" oncomplete="dlgWgvNuevoPais.hide()" image="icon-cancel" title="Cancel"/>
+                    <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaPaises frmIdNuevoPais" action="#{paisesBean.insertar()}" oncomplete="handleLoginRequest(xhr, status, args,1)" icon="iconsave" title="Guardar"/>
+                    <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaPaises" oncomplete="dlgWgvNuevoPais.hide()" icon="iconcancel" title="Cancel"/>
                 </p:dialog>
             </h:form>
             <!--FORMULARIO MODIFICAR PAIS-->
@@ -83,8 +89,8 @@
                         <p:inputText required="true" value="#{paisesBean.pais.nombre}" style="width:200px"/>  
                     </h:panelGrid>  
                     <p:separator/>
-                    <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaPaises frmIdEditarPais" action="#{paisesBean.actualizar()}" oncomplete="handleLoginRequest(xhr, status, args,2)" image="icon-save" title="Guardar"/>
-                    <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaPaises" oncomplete="dlgWgvEditarPais.hide()" image="icon-cancel" title="Cancel"/>
+                    <p:commandButton value="&nbsp;Guardar" update=":grwIdMensajeConfirmacion :frmIdlistaPaises frmIdEditarPais" action="#{paisesBean.actualizar()}" oncomplete="handleLoginRequest(xhr, status, args,2)" icon="iconsave" title="Guardar"/>
+                    <p:commandButton value="&nbsp;Cancelar" update=":frmIdlistaPaises" oncomplete="dlgWgvEditarPais.hide()" icon="iconcancel" title="Cancel"/>
                 </p:dialog>
             </h:form>
             <!-- vista Confirmar Eliminacion-->
@@ -95,8 +101,8 @@
                     <f:facet name="message">
                         <h:outputText value="Confirme Eliminar el Pais [ #{paisesBean.pais.nombre} ]"/>
                     </f:facet>
-                    <p:commandButton value="Aceptar" action="#{paisesBean.eliminar(paisesBean.pais.id)}" update=":frmIdlistaPaises :grwIdMensajeConfirmacion" oncomplete="confDlgWgvConfirmarEliminar.hide()"/>
-                    <p:commandButton value="Cancelar" onclick="confDlgWgvConfirmarEliminar.hide();" type="button" />
+                    <p:commandButton icon="iconaccept" value="Aceptar" action="#{paisesBean.eliminar(paisesBean.pais.id)}" update=":frmIdlistaPaises :grwIdMensajeConfirmacion" oncomplete="confDlgWgvConfirmarEliminar.hide()"/>
+                    <p:commandButton icon="iconcancel" value="Cancelar" onclick="confDlgWgvConfirmarEliminar.hide();" type="button" />
                 </p:confirmDialog>
             </h:form>
             <script type="text/javascript">
