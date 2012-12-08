@@ -49,7 +49,7 @@
                         <p:dataTable var="pais" onExpandStart="#{paisesBean.paises}" value="#{paisesBean.paises}" emptyMessage="No Pais." paginator="true" rows="15"  
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"  
                              rowsPerPageTemplate="5,10,15" paginatorPosition="bottom">  
-                            <p:column headerText="ID" filterBy="#{pais.id}">  
+                            <p:column headerText="ID">  
                                 <h:outputText value="#{pais.id}" />  
                             </p:column>  
                             <p:column headerText="Nombre">  
