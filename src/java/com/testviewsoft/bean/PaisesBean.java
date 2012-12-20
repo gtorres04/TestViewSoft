@@ -49,7 +49,7 @@ public class PaisesBean {
     }
 
     public List<Paises> getPaises() {
-        PaisesDao paisesDao=new PaisesDaoImpl();
+        PaisesDaoImpl paisesDao=new PaisesDaoImpl();
         paises=paisesDao.buscarTodos();
         return paises;
     }
